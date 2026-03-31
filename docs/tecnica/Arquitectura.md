@@ -1,3 +1,0 @@
-# Arquitectura
-
-> Pendiente de contenido.

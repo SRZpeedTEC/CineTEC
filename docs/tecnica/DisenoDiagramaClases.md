@@ -1,3 +1,0 @@
-# DisenoDiagramaClases
-
-> Pendiente de contenido.

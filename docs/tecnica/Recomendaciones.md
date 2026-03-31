@@ -1,3 +1,0 @@
-# Recomendaciones
-
-> Pendiente de contenido.

@@ -1,3 +1,0 @@
-# Cronograma
-
-> Pendiente de contenido.

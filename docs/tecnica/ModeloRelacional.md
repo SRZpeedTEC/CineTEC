@@ -1,3 +1,0 @@
-# ModeloRelacional
-
-> Pendiente de contenido.

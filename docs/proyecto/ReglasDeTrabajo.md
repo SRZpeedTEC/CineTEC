@@ -1,3 +1,0 @@
-# ReglasDeTrabajo
-
-> Pendiente de contenido.

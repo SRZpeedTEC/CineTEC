@@ -1,3 +1,0 @@
-# MetasDelProyecto
-
-> Pendiente de contenido.

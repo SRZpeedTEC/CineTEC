@@ -1,3 +1,0 @@
-# ProblemasConocidos
-
-> Pendiente de contenido.

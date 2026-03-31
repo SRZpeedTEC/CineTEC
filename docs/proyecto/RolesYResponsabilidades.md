@@ -1,3 +1,0 @@
-# RolesYResponsabilidades
-
-> Pendiente de contenido.

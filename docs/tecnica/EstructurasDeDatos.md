@@ -1,3 +1,0 @@
-# EstructurasDeDatos
-
-> Pendiente de contenido.

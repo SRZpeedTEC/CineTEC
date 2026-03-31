@@ -1,3 +1,0 @@
-# PlanDeProyecto
-
-> Pendiente de contenido.
