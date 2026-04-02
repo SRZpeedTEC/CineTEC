@@ -1,5 +1,8 @@
+import ClientMainPage from './pages/clientMainPage';
+import AdminMainPage from './pages/adminMainPage';
+
 function App() {
-  return <h1>CineTec</h1>;
+  return <ClientMainPage />;
 }
 
 export default App;
