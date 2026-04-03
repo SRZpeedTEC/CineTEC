@@ -153,6 +153,7 @@ const movies = [
   },
 ];
 
+
 function clientMainPage() {
   const [selectedCinema, setSelectedCinema] = useState(cinemaOptions[0]);
   const [searchTerm, setSearchTerm] = useState('');
@@ -169,7 +170,6 @@ function clientMainPage() {
     });
   }, [searchTerm, selectedCinema]);
 
-  const featuredMovie = filteredMovies[0] ?? movies[0];
 
   return (
     <div className="client-main-page">

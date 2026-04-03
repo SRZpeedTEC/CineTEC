@@ -1,10 +1,10 @@
 import { useState } from "react";
 import ClientMainPage from "./pages/clientMainPage";
 import AdminLogin from "./pages/AdminLogin";
-import AdminMainPage from "./pages/AdminMainPage";
+import AdminMainPage from "./pages/adminMainPage";
 
 function App() {
-  const mode = "client"; // "client" o "admin"
+  const mode = "admin"; // "client" o "admin"
   const [logged, setLogged] = useState(false);
 
   // MODO CLIENTE
@@ -12,6 +12,10 @@ function App() {
     return <ClientMainPage />;
   }
 
+  return <AdminMainPage />;
+  //return <ClientMainPage />;
+
+  /*
   // MODO ADMIN
   if (mode === "admin") {
     if (!logged) {
@@ -20,6 +24,7 @@ function App() {
 
     return <AdminMainPage />;
   }
+  */
 }
 
 export default App;
