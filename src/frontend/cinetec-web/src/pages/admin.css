@@ -142,20 +142,6 @@ body {
   flex-shrink: 0;
 }
 
-.admin-sidebar-footer {
-  margin-top: auto;
-  padding: 1rem;
-  border-radius: 20px;
-  background: linear-gradient(180deg, rgba(68, 102, 246, 0.12), rgba(230, 153, 70, 0.08));
-  border: 1px solid var(--admin-border);
-  color: var(--admin-text);
-}
-
-.admin-sidebar-footer p {
-  margin-top: 0.9rem;
-  font-size: 0.95rem;
-  line-height: 1.55;
-}
 
 .admin-main-content {
   min-height: 100vh;

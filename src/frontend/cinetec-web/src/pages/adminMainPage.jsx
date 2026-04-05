@@ -50,12 +50,6 @@ export default function AdminMainPage() {
             ))}
           </nav>
 
-          <div className="admin-sidebar-footer">
-            <span className="admin-inline-chip">Modo administrador</span>
-            <p className="mb-0">
-              Panel visual con navegación interna rápida y formularios integrados.
-            </p>
-          </div>
         </div>
       </aside>
 
