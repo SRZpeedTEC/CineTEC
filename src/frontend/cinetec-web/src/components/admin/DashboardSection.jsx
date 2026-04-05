@@ -1,8 +1,8 @@
 export default function DashboardSection({
   metrics,
   projectionHighlights,
-  onCreateProjection,
-  onOpenCartelera,
+  onCreateFunction,
+  onOpenMovies,
 }) {
   return (
     <section className="admin-dashboard">
@@ -10,29 +10,29 @@ export default function DashboardSection({
         <div className="card-body p-4 p-xl-5">
           <div className="row g-4 align-items-center">
             <div className="col-xl-7">
-              <span className="admin-kicker">Panel central</span>
+              <span className="admin-kicker">Main panel</span>
               <h1 className="admin-page-title mt-2 mb-3">
-                Control operativo elegante para todo CineTEC.
+                Clean operational control for the full CineTEC admin flow.
               </h1>
               <p className="admin-page-copy mb-4">
-                Supervisa clientes, peliculas, sucursales, salas y proyecciones desde una
-                sola experiencia fluida.
+                Review clients, movies, cinemas, rooms, and functions from one
+                consistent workspace.
               </p>
 
               <div className="d-flex flex-column flex-sm-row gap-3">
                 <button
                   type="button"
                   className="btn admin-btn admin-btn-primary"
-                  onClick={onCreateProjection}
+                  onClick={onCreateFunction}
                 >
-                  Crear nueva proyeccion
+                  Create new function
                 </button>
                 <button
                   type="button"
                   className="btn admin-btn admin-btn-ghost"
-                  onClick={onOpenCartelera}
+                  onClick={onOpenMovies}
                 >
-                  Revisar cartelera
+                  Review movie catalog
                 </button>
               </div>
             </div>
@@ -40,7 +40,7 @@ export default function DashboardSection({
             <div className="col-xl-5">
               <div className="admin-hero-sidecard">
                 <div className="admin-hero-sidecard-top">
-                  <span className="admin-inline-chip">Resumen visual</span>
+                  <span className="admin-inline-chip">Visual summary</span>
                   <span className="admin-live-dot" />
                 </div>
                 <div className="admin-hero-sidecard-grid">
@@ -66,22 +66,22 @@ export default function DashboardSection({
             <div className="card-body p-4">
               <div className="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
                 <div>
-                  <h2 className="admin-card-title mb-1">Funciones destacadas del dia</h2>
+                  <h2 className="admin-card-title mb-1">Highlighted functions</h2>
                   <p className="admin-card-copy mb-0">
-                    Monitorea visualmente los horarios y salas con mas movimiento.
+                    Quickly monitor the busiest function times and room assignments.
                   </p>
                 </div>
-                <span className="admin-inline-chip admin-inline-chip-muted">Demo UI</span>
+                <span className="admin-inline-chip admin-inline-chip-muted">UI demo</span>
               </div>
 
               <div className="table-responsive">
                 <table className="table table-dark align-middle mb-0 admin-data-table">
                   <thead>
                     <tr>
-                      <th scope="col">Pelicula</th>
-                      <th scope="col">Sala</th>
-                      <th scope="col">Hora</th>
-                      <th scope="col">Ocupacion</th>
+                      <th scope="col">Movie</th>
+                      <th scope="col">Room</th>
+                      <th scope="col">Time</th>
+                      <th scope="col">Occupancy</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -105,19 +105,19 @@ export default function DashboardSection({
         <div className="col-12 col-xxl-4">
           <div className="card border-0 admin-side-card h-100">
             <div className="card-body p-4">
-              <h2 className="admin-card-title mb-3">Acceso rapido</h2>
+              <h2 className="admin-card-title mb-3">Quick access</h2>
               <div className="d-grid gap-3">
                 <div className="admin-quick-action">
-                  <span className="admin-quick-action-label">Clientes</span>
-                  <strong>Actualizar base de datos de membresias</strong>
+                  <span className="admin-quick-action-label">Clients</span>
+                  <strong>Review credentials and profile records</strong>
                 </div>
                 <div className="admin-quick-action">
-                  <span className="admin-quick-action-label">Salas</span>
-                  <strong>Revisar mantenimiento preventivo programado</strong>
+                  <span className="admin-quick-action-label">Rooms</span>
+                  <strong>Validate capacity values before syncing with the API</strong>
                 </div>
                 <div className="admin-quick-action">
-                  <span className="admin-quick-action-label">Sucursales</span>
-                  <strong>Comparar capacidad instalada por complejo</strong>
+                  <span className="admin-quick-action-label">Functions</span>
+                  <strong>Compare movie IDs and room numbers across schedules</strong>
                 </div>
               </div>
             </div>

@@ -4,9 +4,75 @@ import { initialRecords } from "../mocks/adminMockData";
 import {
   calculateAge,
   calculateCapacity,
+  calculateMaxCapacity,
   createFormState,
   formatProjectionDateTime,
+  getRecordKey,
 } from "../utils/adminHelpers";
+
+function buildRecord(sectionKey, formData, currentRecords, mode) {
+  switch (sectionKey) {
+    case "clients": {
+      const nextId =
+        mode === "edit" && formData.ID
+          ? Number(formData.ID)
+          : Math.max(0, ...currentRecords.clients.map((client) => Number(client.ID) || 0)) + 1;
+
+      return {
+        ID: nextId,
+        email: formData.email.trim(),
+        password: formData.password,
+        birthdate: formData.birthdate,
+        age: Number(calculateAge(formData.birthdate)) || 0,
+        Fname: formData.Fname.trim(),
+        Minit: formData.Minit.trim(),
+      };
+    }
+    case "movies":
+      return {
+        originalName: formData.originalName.trim(),
+        commercialName: formData.commercialName.trim(),
+        imageURL: formData.imageURL.trim(),
+        duration: formData.duration.trim(),
+        rating: formData.rating,
+        director: formData.director.trim(),
+        protagonists: formData.protagonists
+          .split(",")
+          .map((item) => item.trim())
+          .filter(Boolean),
+      };
+    case "cinemas":
+      return {
+        name: formData.name.trim(),
+        address: formData.address.trim(),
+        province: formData.province.trim(),
+        number_of_rooms: Number(formData.number_of_rooms) || 0,
+      };
+    case "rooms": {
+      const totalCapacity =
+        calculateCapacity(formData.number_of_rows, formData.number_of_columns) || 0;
+      const maxCapacity = calculateMaxCapacity(totalCapacity, formData.capacity_factor) || 0;
+
+      return {
+        Cinema_id: formData.Cinema_id.trim(),
+        room_number: Number(formData.room_number) || 0,
+        number_of_columns: Number(formData.number_of_columns) || 0,
+        number_of_rows: Number(formData.number_of_rows) || 0,
+        total_capacity: Number(totalCapacity) || 0,
+        capacity_factor: Number(formData.capacity_factor) || 0,
+        max_capacity: Number(maxCapacity) || 0,
+      };
+    }
+    case "functions":
+      return {
+        Movie_id: formData.Movie_id.trim(),
+        room_number: Number(formData.room_number) || 0,
+        datetime: formData.datetime,
+      };
+    default:
+      return formData;
+  }
+}
 
 export function useAdminMainPage() {
   const [activeTab, setActiveTab] = useState("dashboard");
@@ -15,7 +81,7 @@ export function useAdminMainPage() {
     isOpen: false,
     sectionKey: null,
     mode: "add",
-    editingId: null,
+    recordKey: null,
   });
   const [formData, setFormData] = useState(null);
 
@@ -23,23 +89,23 @@ export function useAdminMainPage() {
 
   const dashboardMetrics = useMemo(
     () => [
-      { label: "Clientes activos", value: `${records.clientes.length}`, accent: "primary" },
-      { label: "Películas en cartelera", value: `${records.peliculas.length}`, accent: "secondary" },
-      { label: "Salas operativas", value: `${records.salas.length}`, accent: "neutral" },
-      { label: "Funciones hoy", value: `${records.proyecciones.length}`, accent: "secondary" },
+      { label: "Active clients", value: `${records.clients.length}`, accent: "primary" },
+      { label: "Movies in catalog", value: `${records.movies.length}`, accent: "secondary" },
+      { label: "Active rooms", value: `${records.rooms.length}`, accent: "neutral" },
+      { label: "Functions scheduled", value: `${records.functions.length}`, accent: "secondary" },
     ],
     [records]
   );
 
   const projectionHighlights = useMemo(
     () =>
-      records.proyecciones.slice(0, 3).map((projection, index) => ({
-        movie: projection.pelicula,
-        room: `Sala ${projection.sala}`,
-        time: formatProjectionDateTime(projection.horario),
+      records.functions.slice(0, 3).map((projection, index) => ({
+        movie: projection.Movie_id,
+        room: `Room ${projection.room_number}`,
+        time: formatProjectionDateTime(projection.datetime),
         occupancy: ["84%", "71%", "66%"][index] ?? "60%",
       })),
-    [records.proyecciones]
+    [records.functions]
   );
 
   function openForm(sectionKey, mode, record = null) {
@@ -48,7 +114,7 @@ export function useAdminMainPage() {
       isOpen: true,
       sectionKey,
       mode,
-      editingId: record?.id ?? null,
+      recordKey: record ? getRecordKey(sectionKey, record) : null,
     });
     setFormData(createFormState(sectionKey, records, record));
   }
@@ -58,7 +124,7 @@ export function useAdminMainPage() {
       isOpen: false,
       sectionKey: null,
       mode: "add",
-      editingId: null,
+      recordKey: null,
     });
     setFormData(null);
   }
@@ -72,29 +138,32 @@ export function useAdminMainPage() {
   }
 
   function handleFormChange(event) {
-    const { name, value, type, files } = event.target;
+    const { name, value } = event.target;
 
     setFormData((current) => {
-      const next = { ...current };
+      const next = { ...current, [name]: value };
 
-      if (type === "file") {
-        next.imagenFile = files?.[0] ?? null;
-        next.imagenArchivo = files?.[0]?.name ?? "";
-        return next;
-      }
-
-      next[name] = value;
-
-      if (name === "fechaNacimiento") {
+      if (name === "birthdate") {
         const calculatedAge = calculateAge(value);
-        next.edad = calculatedAge === "" ? "" : calculatedAge;
+        next.age = calculatedAge === "" ? "" : calculatedAge;
       }
 
-      if (name === "cantidadFilas" || name === "columnasEspacios") {
-        next.capacidad = calculateCapacity(
-          name === "cantidadFilas" ? value : next.cantidadFilas,
-          name === "columnasEspacios" ? value : next.columnasEspacios
+      if (
+        name === "number_of_rows" ||
+        name === "number_of_columns" ||
+        name === "capacity_factor"
+      ) {
+        const totalCapacity = calculateCapacity(
+          name === "number_of_rows" ? value : next.number_of_rows,
+          name === "number_of_columns" ? value : next.number_of_columns
         );
+        const maxCapacity = calculateMaxCapacity(
+          totalCapacity,
+          name === "capacity_factor" ? value : next.capacity_factor
+        );
+
+        next.total_capacity = totalCapacity === "" ? "" : String(totalCapacity);
+        next.max_capacity = maxCapacity === "" ? "" : String(maxCapacity);
       }
 
       return next;
@@ -103,16 +172,44 @@ export function useAdminMainPage() {
 
   function handleSubmit(event) {
     event.preventDefault();
+
+    if (!panelState.sectionKey || !formData) {
+      closeForm();
+      return;
+    }
+
+    const nextRecord = buildRecord(panelState.sectionKey, formData, records, panelState.mode);
+
+    setRecords((current) => {
+      const currentSectionRecords = current[panelState.sectionKey];
+
+      if (panelState.mode === "edit" && panelState.recordKey) {
+        return {
+          ...current,
+          [panelState.sectionKey]: currentSectionRecords.map((row) =>
+            getRecordKey(panelState.sectionKey, row) === panelState.recordKey ? nextRecord : row
+          ),
+        };
+      }
+
+      return {
+        ...current,
+        [panelState.sectionKey]: [...currentSectionRecords, nextRecord],
+      };
+    });
+
     closeForm();
   }
 
-  function handleDeleteRecord(sectionKey, recordId) {
+  function handleDeleteRecord(sectionKey, recordKey) {
     setRecords((current) => ({
       ...current,
-      [sectionKey]: current[sectionKey].filter((row) => row.id !== recordId),
+      [sectionKey]: current[sectionKey].filter(
+        (row) => getRecordKey(sectionKey, row) !== recordKey
+      ),
     }));
 
-    if (panelState.sectionKey === sectionKey && panelState.editingId === recordId) {
+    if (panelState.sectionKey === sectionKey && panelState.recordKey === recordKey) {
       closeForm();
     }
   }

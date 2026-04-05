@@ -12,115 +12,106 @@ function FormField({ label, helper, children }) {
   );
 }
 
-function renderFields(sectionKey, formData, records, onChange) {
+function renderFields(sectionKey, formData, onChange) {
   switch (sectionKey) {
-    case "clientes":
+    case "clients":
       return (
         <>
-          <FormField label="Nombre completo">
+          <FormField label="First name">
             <input
               className="form-control admin-form-control"
-              name="nombre"
+              name="Fname"
               type="text"
-              value={formData.nombre}
+              value={formData.Fname}
               onChange={onChange}
             />
           </FormField>
-          <FormField label="Cedula">
+          <FormField label="Middle initial">
             <input
               className="form-control admin-form-control"
-              name="cedula"
+              name="Minit"
               type="text"
-              value={formData.cedula}
+              maxLength="1"
+              value={formData.Minit}
               onChange={onChange}
             />
           </FormField>
-          <FormField label="Telefono">
+          <FormField label="Email">
             <input
               className="form-control admin-form-control"
-              name="telefono"
-              type="tel"
-              value={formData.telefono}
+              name="email"
+              type="email"
+              value={formData.email}
               onChange={onChange}
             />
           </FormField>
-          <FormField label="Fecha de nacimiento">
+          <FormField label="Password">
             <input
               className="form-control admin-form-control"
-              name="fechaNacimiento"
+              name="password"
+              type="text"
+              value={formData.password}
+              onChange={onChange}
+            />
+          </FormField>
+          <FormField label="Birthdate">
+            <input
+              className="form-control admin-form-control"
+              name="birthdate"
               type="date"
-              value={formData.fechaNacimiento}
+              value={formData.birthdate}
               onChange={onChange}
             />
           </FormField>
-          <FormField
-            label="Edad"
-            helper="Se calcula automaticamente al elegir la fecha de nacimiento."
-          >
+          <FormField label="Age" helper="Calculated automatically from the selected birthdate.">
             <input
               className="form-control admin-form-control"
-              name="edad"
+              name="age"
               type="text"
-              value={formData.edad}
+              value={formData.age}
               readOnly
             />
           </FormField>
         </>
       );
 
-    case "peliculas":
+    case "movies":
       return (
         <>
-          <FormField label="Nombre original">
+          <FormField label="Original name">
             <input
               className="form-control admin-form-control"
-              name="nombreOriginal"
+              name="originalName"
               type="text"
-              value={formData.nombreOriginal}
+              value={formData.originalName}
               onChange={onChange}
             />
           </FormField>
-          <FormField label="Nombre comercial">
+          <FormField label="Commercial name">
             <input
               className="form-control admin-form-control"
-              name="nombreComercial"
+              name="commercialName"
               type="text"
-              value={formData.nombreComercial}
+              value={formData.commercialName}
               onChange={onChange}
             />
           </FormField>
-          <FormField label="URL de imagen">
+          <FormField label="Poster URL">
             <input
               className="form-control admin-form-control"
-              name="imagenUrl"
+              name="imageURL"
               type="url"
-              value={formData.imagenUrl}
+              value={formData.imageURL}
               onChange={onChange}
             />
           </FormField>
-          <FormField
-            label="Archivo de poster"
-            helper={
-              formData.imagenArchivo
-                ? `Archivo seleccionado: ${formData.imagenArchivo}`
-                : "Tambien puedes cargar una imagen local para pruebas."
-            }
-          >
+          <FormField label="Duration">
             <input
               className="form-control admin-form-control"
-              name="imagenArchivo"
-              type="file"
-              accept="image/*"
-              onChange={onChange}
-            />
-          </FormField>
-          <FormField label="Duracion">
-            <input
-              className="form-control admin-form-control"
-              name="duracion"
+              name="duration"
               type="text"
-              placeholder="120 min"
-              value={formData.duracion}
+              placeholder="1h 26m"
+              value={formData.duration}
               onChange={onChange}
             />
           </FormField>
@@ -133,11 +124,11 @@ function renderFields(sectionKey, formData, records, onChange) {
               onChange={onChange}
             />
           </FormField>
-          <FormField label="Clasificacion">
+          <FormField label="Rating">
             <select
               className="form-select admin-form-control"
-              name="clasificacion"
-              value={formData.clasificacion}
+              name="rating"
+              value={formData.rating}
               onChange={onChange}
             >
               {ratingOptions.map((option) => (
@@ -147,149 +138,161 @@ function renderFields(sectionKey, formData, records, onChange) {
               ))}
             </select>
           </FormField>
-          <FormField label="Protagonistas">
+          <FormField label="Protagonists" helper="Separate names with commas to match the backend list.">
             <textarea
               className="form-control admin-form-control admin-form-textarea"
-              name="protagonistas"
-              value={formData.protagonistas}
+              name="protagonists"
+              value={formData.protagonists}
               onChange={onChange}
             />
           </FormField>
         </>
       );
 
-    case "sucursales":
+    case "cinemas":
       return (
         <>
-          <FormField label="Nombre del cine">
+          <FormField label="Cinema name">
             <input
               className="form-control admin-form-control"
-              name="nombreCine"
+              name="name"
               type="text"
-              value={formData.nombreCine}
+              value={formData.name}
               onChange={onChange}
             />
           </FormField>
-          <FormField label="Ubicacion">
+          <FormField label="Address">
             <input
               className="form-control admin-form-control"
-              name="ubicacion"
+              name="address"
               type="text"
-              value={formData.ubicacion}
+              value={formData.address}
               onChange={onChange}
             />
           </FormField>
-          <FormField label="Cantidad de salas">
+          <FormField label="Province">
             <input
               className="form-control admin-form-control"
-              name="cantidadSalas"
+              name="province"
+              type="text"
+              value={formData.province}
+              onChange={onChange}
+            />
+          </FormField>
+          <FormField label="Number of rooms">
+            <input
+              className="form-control admin-form-control"
+              name="number_of_rooms"
               type="number"
               min="0"
-              value={formData.cantidadSalas}
+              value={formData.number_of_rooms}
               onChange={onChange}
             />
           </FormField>
         </>
       );
 
-    case "salas":
+    case "rooms":
       return (
         <>
-          <FormField label="Identificador">
+          <FormField label="Cinema ID">
             <input
               className="form-control admin-form-control"
-              name="identificador"
+              name="Cinema_id"
               type="text"
-              value={formData.identificador}
+              value={formData.Cinema_id}
               onChange={onChange}
             />
           </FormField>
-          <FormField label="Sucursal">
-            <select
-              className="form-select admin-form-control"
-              name="nombreSucursal"
-              value={formData.nombreSucursal}
-              onChange={onChange}
-            >
-              {records.sucursales.map((branch) => (
-                <option key={branch.id} value={branch.nombreCine}>
-                  {branch.nombreCine}
-                </option>
-              ))}
-            </select>
-          </FormField>
-          <FormField label="Cantidad de filas">
+          <FormField label="Room number">
             <input
               className="form-control admin-form-control"
-              name="cantidadFilas"
+              name="room_number"
               type="number"
               min="0"
-              value={formData.cantidadFilas}
+              value={formData.room_number}
               onChange={onChange}
             />
           </FormField>
-          <FormField label="Columnas o espacios por fila">
+          <FormField label="Number of columns">
             <input
               className="form-control admin-form-control"
-              name="columnasEspacios"
+              name="number_of_columns"
               type="number"
               min="0"
-              value={formData.columnasEspacios}
+              value={formData.number_of_columns}
               onChange={onChange}
             />
           </FormField>
-          <FormField
-            label="Capacidad"
-            helper="Se actualiza automaticamente segun filas y columnas."
-          >
+          <FormField label="Number of rows">
             <input
               className="form-control admin-form-control"
-              name="capacidad"
+              name="number_of_rows"
+              type="number"
+              min="0"
+              value={formData.number_of_rows}
+              onChange={onChange}
+            />
+          </FormField>
+          <FormField label="Capacity factor" helper="Used to calculate the maximum allowed capacity.">
+            <input
+              className="form-control admin-form-control"
+              name="capacity_factor"
+              type="number"
+              min="0"
+              value={formData.capacity_factor}
+              onChange={onChange}
+            />
+          </FormField>
+          <FormField label="Total capacity" helper="Calculated automatically from rows and columns.">
+            <input
+              className="form-control admin-form-control"
+              name="total_capacity"
               type="text"
-              value={formData.capacidad}
+              value={formData.total_capacity}
+              readOnly
+            />
+          </FormField>
+          <FormField label="Max capacity" helper="Calculated automatically from total capacity and capacity factor.">
+            <input
+              className="form-control admin-form-control"
+              name="max_capacity"
+              type="text"
+              value={formData.max_capacity}
               readOnly
             />
           </FormField>
         </>
       );
 
-    case "proyecciones":
+    case "functions":
       return (
         <>
-          <FormField label="Pelicula">
-            <select
-              className="form-select admin-form-control"
-              name="pelicula"
-              value={formData.pelicula}
-              onChange={onChange}
-            >
-              {records.peliculas.map((movie) => (
-                <option key={movie.id} value={movie.nombreComercial}>
-                  {movie.nombreComercial}
-                </option>
-              ))}
-            </select>
-          </FormField>
-          <FormField label="Sala">
-            <select
-              className="form-select admin-form-control"
-              name="sala"
-              value={formData.sala}
-              onChange={onChange}
-            >
-              {records.salas.map((room) => (
-                <option key={room.id} value={room.identificador}>
-                  {room.identificador}
-                </option>
-              ))}
-            </select>
-          </FormField>
-          <FormField label="Horario">
+          <FormField label="Movie ID">
             <input
               className="form-control admin-form-control"
-              name="horario"
+              name="Movie_id"
+              type="text"
+              value={formData.Movie_id}
+              onChange={onChange}
+            />
+          </FormField>
+          <FormField label="Room number">
+            <input
+              className="form-control admin-form-control"
+              name="room_number"
+              type="number"
+              min="0"
+              value={formData.room_number}
+              onChange={onChange}
+            />
+          </FormField>
+          <FormField label="Date and time">
+            <input
+              className="form-control admin-form-control"
+              name="datetime"
               type="datetime-local"
-              value={formData.horario}
+              value={formData.datetime}
               onChange={onChange}
             />
           </FormField>
@@ -305,7 +308,6 @@ export default function FormPanel({
   sectionKey,
   mode,
   formData,
-  records,
   onChange,
   onCancel,
   onSubmit,
@@ -321,33 +323,31 @@ export default function FormPanel({
       <div className="card-body p-4">
         <div className="admin-alert admin-alert-info">
           {mode === "edit"
-            ? `Editando registro de ${meta.title.toLowerCase()}.`
-            : `Preparando un nuevo registro para ${meta.title.toLowerCase()}.`}
+            ? `Editing a ${meta.title.toLowerCase()} record.`
+            : `Preparing a new ${meta.title.toLowerCase()} record.`}
         </div>
 
         <div className="mb-4">
-          <span className="admin-kicker">Formulario</span>
+          <span className="admin-kicker">Form</span>
           <h3 className="admin-section-title mb-2">
-            {mode === "edit" ? "Editar registro" : meta.addLabel}
+            {mode === "edit" ? "Edit record" : meta.addLabel}
           </h3>
           <p className="admin-section-copy mb-0">{meta.subtitle}</p>
         </div>
 
         <form onSubmit={onSubmit}>
-          <div className="row g-3">
-            {renderFields(sectionKey, formData, records, onChange)}
-          </div>
+          <div className="row g-3">{renderFields(sectionKey, formData, onChange)}</div>
 
           <div className="d-flex flex-column flex-sm-row gap-2 mt-4">
             <button type="submit" className="btn admin-btn admin-btn-primary">
-              {mode === "edit" ? "Guardar cambios" : "Guardar registro"}
+              {mode === "edit" ? "Save changes" : "Save record"}
             </button>
             <button
               type="button"
               className="btn admin-btn admin-btn-ghost"
               onClick={onCancel}
             >
-              Cancelar
+              Cancel
             </button>
           </div>
         </form>

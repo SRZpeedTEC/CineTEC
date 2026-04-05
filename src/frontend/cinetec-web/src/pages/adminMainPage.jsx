@@ -22,6 +22,13 @@ export default function AdminMainPage() {
     handleDeleteRecord,
   } = useAdminMainPage();
 
+  const currentDateLabel = new Intl.DateTimeFormat("en-US", {
+    weekday: "long",
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  }).format(new Date());
+
   return (
     <div className="admin-shell">
       <aside className="admin-sidebar">
@@ -49,7 +56,6 @@ export default function AdminMainPage() {
               </button>
             ))}
           </nav>
-
         </div>
       </aside>
 
@@ -57,20 +63,20 @@ export default function AdminMainPage() {
         <div className="container-fluid px-3 px-lg-4 px-xxl-5 py-4 py-lg-5">
           <div className="admin-topbar mb-4">
             <div>
-              <p className="admin-kicker mb-2">Administrador</p>
+              <p className="admin-kicker mb-2">Administrator</p>
               <h1 className="admin-current-title mb-1">
-                {activeTab === "dashboard" ? "Dashboard Ejecutivo" : activeSection.title}
+                {activeTab === "dashboard" ? "Executive Dashboard" : activeSection.title}
               </h1>
               <p className="admin-current-copy mb-0">
                 {activeTab === "dashboard"
-                  ? "Vista general de rendimiento, cartelera y operaciones del sistema."
+                  ? "High-level view of catalog data, scheduling, and system operations."
                   : activeSection.subtitle}
               </p>
             </div>
 
             <div className="admin-topbar-meta">
-              <span className="admin-inline-chip">Jueves, 2 Abr 2026</span>
-              <span className="admin-inline-chip admin-inline-chip-muted">Sesión activa</span>
+              <span className="admin-inline-chip">{currentDateLabel}</span>
+              <span className="admin-inline-chip admin-inline-chip-muted">Active session</span>
             </div>
           </div>
 
@@ -78,8 +84,8 @@ export default function AdminMainPage() {
             <DashboardSection
               metrics={dashboardMetrics}
               projectionHighlights={projectionHighlights}
-              onCreateProjection={() => openForm("proyecciones", "add")}
-              onOpenCartelera={() => handleTabChange("peliculas")}
+              onCreateFunction={() => openForm("functions", "add")}
+              onOpenMovies={() => handleTabChange("movies")}
             />
           ) : (
             <ManagementSection
@@ -89,7 +95,7 @@ export default function AdminMainPage() {
               formData={formData}
               onOpenAdd={() => openForm(activeTab, "add")}
               onOpenEdit={(record) => openForm(activeTab, "edit", record)}
-              onDelete={(recordId) => handleDeleteRecord(activeTab, recordId)}
+              onDelete={(recordKey) => handleDeleteRecord(activeTab, recordKey)}
               onChange={handleFormChange}
               onCancel={closeForm}
               onSubmit={handleSubmit}
