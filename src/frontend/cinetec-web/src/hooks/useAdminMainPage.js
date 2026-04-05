@@ -1,4 +1,5 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { getMovies, createMovie } from "../services/movieService";
 import { sectionMeta } from "../config/adminConfig";
 import { initialRecords } from "../mocks/adminMockData";
 import {
@@ -107,6 +108,25 @@ export function useAdminMainPage() {
       })),
     [records.functions]
   );
+  
+
+  useEffect(() => {
+    async function fetchMovies() {
+      try {
+        const moviesFromAPI = await getMovies();
+        setRecords((current) => ({
+          ...current,
+          movies: moviesFromAPI,
+        }));
+      } catch (error) {
+        console.error("Error fetching movies:", error);
+      }
+    }
+
+    fetchMovies();
+  }, []);
+
+        
 
   function openForm(sectionKey, mode, record = null) {
     setActiveTab(sectionKey);
@@ -170,36 +190,29 @@ export function useAdminMainPage() {
     });
   }
 
-  function handleSubmit(event) {
-    event.preventDefault();
+  async function handleSubmit(event) {
+  event.preventDefault();
 
-    if (!panelState.sectionKey || !formData) {
+  if (panelState.sectionKey === "movies" && panelState.mode === "add") {
+    try {
+      const moviePayload = buildRecord("movies", formData, records, panelState.mode);
+      const createdMovie = await createMovie(moviePayload);
+
+      setRecords((current) => ({
+        ...current,
+        movies: [createdMovie, ...current.movies],
+      }));
+
       closeForm();
-      return;
+    } catch (error) {
+      console.error("Error creating movie:", error);
     }
 
-    const nextRecord = buildRecord(panelState.sectionKey, formData, records, panelState.mode);
-
-    setRecords((current) => {
-      const currentSectionRecords = current[panelState.sectionKey];
-
-      if (panelState.mode === "edit" && panelState.recordKey) {
-        return {
-          ...current,
-          [panelState.sectionKey]: currentSectionRecords.map((row) =>
-            getRecordKey(panelState.sectionKey, row) === panelState.recordKey ? nextRecord : row
-          ),
-        };
-      }
-
-      return {
-        ...current,
-        [panelState.sectionKey]: [...currentSectionRecords, nextRecord],
-      };
-    });
-
-    closeForm();
+    return;
   }
+
+  closeForm();
+}
 
   function handleDeleteRecord(sectionKey, recordKey) {
     setRecords((current) => ({
