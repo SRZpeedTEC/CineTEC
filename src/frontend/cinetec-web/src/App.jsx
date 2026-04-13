@@ -4,7 +4,7 @@ import AdminLogin from "./pages/AdminLogin";
 import AdminMainPage from "./pages/adminMainPage";
 
 function App() {
-  const mode = "admin"; // "client" o "admin"
+  const mode = "client"; // "client" o "admin"
   const [logged, setLogged] = useState(false);
 
   // MODO CLIENTE
