@@ -1,0 +1,92 @@
+export const initialRecords = {
+  clientes: [
+    {
+      id: 1,
+      nombre: "Maria Fernandez",
+      cedula: "1-1456-0876",
+      telefono: "+506 8888-2211",
+      fechaNacimiento: "1998-04-21",
+      edad: 27,
+    },
+    {
+      id: 2,
+      nombre: "Daniel Solano",
+      cedula: "2-0987-6543",
+      telefono: "+506 7012-4488",
+      fechaNacimiento: "1989-11-03",
+      edad: 36,
+    },
+  ],
+  peliculas: [
+    {
+      id: 1,
+      nombreOriginal: "Midnight Signal",
+      nombreComercial: "Señal de Medianoche",
+      imagenUrl: "https://images.unsplash.com/photo-1517604931442-7e0c8ed2963c",
+      imagenArchivo: "midnight-signal.jpg",
+      duracion: "128 min",
+      protagonistas: "Elena Ruiz, Noah Vega",
+      director: "Camila Soto",
+      clasificacion: "PG-13",
+      posterStyle: { from: "#2C3140", to: "#4466F6" },
+    },
+    {
+      id: 2,
+      nombreOriginal: "Velvet Heist",
+      nombreComercial: "Golpe de Terciopelo",
+      imagenUrl: "https://images.unsplash.com/photo-1489599849927-2ee91cede3ba",
+      imagenArchivo: "velvet-heist.jpg",
+      duracion: "116 min",
+      protagonistas: "Lucia Prado, Marco Diaz",
+      director: "Sergio Valverde",
+      clasificacion: "R",
+      posterStyle: { from: "#402E1F", to: "#E69946" },
+    },
+  ],
+  sucursales: [
+    {
+      id: 1,
+      nombreCine: "CineTEC Escazu",
+      ubicacion: "Multiplaza Escazu, San Jose",
+      cantidadSalas: 8,
+    },
+    {
+      id: 2,
+      nombreCine: "CineTEC Cartago",
+      ubicacion: "Paseo Metropoli, Cartago",
+      cantidadSalas: 6,
+    },
+  ],
+  salas: [
+    {
+      id: 1,
+      identificador: "A-01",
+      nombreSucursal: "CineTEC Escazu",
+      cantidadFilas: 12,
+      columnasEspacios: 18,
+      capacidad: 216,
+    },
+    {
+      id: 2,
+      identificador: "B-07",
+      nombreSucursal: "CineTEC Cartago",
+      cantidadFilas: 10,
+      columnasEspacios: 16,
+      capacidad: 160,
+    },
+  ],
+  proyecciones: [
+    {
+      id: 1,
+      pelicula: "Señal de Medianoche",
+      sala: "A-01",
+      horario: "2026-04-02T19:20",
+    },
+    {
+      id: 2,
+      pelicula: "Golpe de Terciopelo",
+      sala: "B-07",
+      horario: "2026-04-02T21:40",
+    },
+  ],
+};

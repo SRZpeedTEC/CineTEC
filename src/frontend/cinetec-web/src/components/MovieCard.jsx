@@ -1,4 +1,4 @@
-function createPosterDataUri(movie) {
+export function createPosterDataUri(movie) {
   const posterSvg = `
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 620">
       <defs>
@@ -21,45 +21,45 @@ function createPosterDataUri(movie) {
   return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(posterSvg)}`;
 }
 
-function MovieCard({ movie }) {
+function MovieCard({ movie, index, total, onPrev, onNext, onBookNow }) {
   return (
-    <article className="client-movie-card h-100">
-      <div className="client-movie-poster-wrap">
-        <img
-          alt={`${movie.title} poster`}
-          className="client-movie-poster"
-          src={createPosterDataUri(movie)}
-        />
-        <span className="client-format-badge">{movie.format}</span>
-      </div>
+    <div className="client-feature">
 
-      <div className="client-movie-content">
-        <div>
-          <div className="d-flex flex-wrap gap-2 mb-2">
-            <span className="client-meta-pill">{movie.rating}</span>
-            <span className="client-meta-pill">{movie.duration}</span>
-          </div>
-          <h3 className="client-movie-title">{movie.title}</h3>
-          <p className="client-movie-genre mb-2">{movie.genre}</p>
-          <p className="client-movie-description mb-3">{movie.description}</p>
+      {/* Left arrow */}
+      <button className="client-arrow-btn client-arrow-left" onClick={onPrev} type="button">
+        &#8592;
+      </button>
+
+      {/* Center: poster + title + book */}
+      <div className="client-feature-center">
+        <div className="client-feature-poster">
+          <img
+            alt={`${movie.title} poster`}
+            className="client-feature-img"
+            src={createPosterDataUri(movie)}
+          />
+          <span className="client-format-badge">{movie.format}</span>
         </div>
 
-        <div className="mt-auto">
-          <p className="client-card-label mb-2">Showtimes</p>
-          <div className="d-flex flex-wrap gap-2 mb-3">
-            {movie.sessions.map((session) => (
-              <span className="client-session-pill" key={session}>
-                {session}
-              </span>
-            ))}
-          </div>
-
-          <button className="btn client-btn-primary w-100" type="button">
+        <div className="client-feature-info">
+          <h2 className="client-feature-title">{movie.title}</h2>
+          <button className="client-book-btn" onClick={onBookNow} type="button">
             Book Now
           </button>
         </div>
       </div>
-    </article>
+
+      {/* Right arrow */}
+      <button className="client-arrow-btn client-arrow-right" onClick={onNext} type="button">
+        &#8594;
+      </button>
+
+      {/* Counter */}
+      <span className="client-counter">
+        {String(index + 1).padStart(2, '0')} / {String(total).padStart(2, '0')}
+      </span>
+
+    </div>
   );
 }
 
