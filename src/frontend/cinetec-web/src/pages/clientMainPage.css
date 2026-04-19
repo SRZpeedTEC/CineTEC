@@ -98,10 +98,13 @@ body {
 /* ─── Hero carousel ───────────────────────────────────────────────────────── */
 .client-hero {
   display: grid;
-  grid-template-columns: 420px 1fr 260px;
+  grid-template-columns: minmax(0, 420px) 1fr minmax(0, 260px);
   gap: 0;
   min-height: 620px;
   border-bottom: 1px solid var(--client-border-light);
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
 }
 
 .client-hero-poster {
@@ -767,7 +770,7 @@ body {
 
 /* ─── Responsive ──────────────────────────────────────────────────────────── */
 @media (max-width: 1024px) {
-  .client-hero { grid-template-columns: 380px 1fr; }
+  .client-hero { grid-template-columns: minmax(0, 320px) 1fr; }
   .client-hero-dulceria { display: none; }
 }
 
@@ -778,4 +781,15 @@ body {
   .client-modal { grid-template-columns: 1fr; }
   .client-modal-poster { max-width: 160px; }
   .client-poster-grid { grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+  .client-navbar-controls { flex-wrap: wrap; }
+  .client-select { min-width: 120px; }
+  .client-search-input { max-width: 100%; min-width: 0; }
+}
+
+@media (max-width: 480px) {
+  .client-hero { grid-template-columns: 1fr; min-height: auto; }
+  .client-navbar { padding: 0.5rem 1rem; gap: 0.75rem; }
+  .client-poster-grid { grid-template-columns: repeat(2, 1fr); gap: 0.75rem; }
+  .client-billboard { padding: 2rem 1rem 3rem; }
+  .client-modal { padding: 1.25rem; gap: 1.25rem; }
 }
