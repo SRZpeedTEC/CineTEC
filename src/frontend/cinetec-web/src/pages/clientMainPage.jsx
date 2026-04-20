@@ -69,7 +69,7 @@ function ClientMainPage() {
         setErrorMessage(
           error instanceof Error
             ? error.message
-            : "No se pudo cargar la cartelera desde el backend."
+            : "No se pudo cargar la cartelera."
         );
       } finally {
         if (isMounted) {
@@ -198,7 +198,7 @@ function ClientMainPage() {
               <br />
               Protagonistas: {heroMovie.protagonists.join(", ") || "Pendientes"}
             </p>
-            <p className="client-hero-cinemas">Disponible desde la API de CineTEC</p>
+            <p className="client-hero-cinemas">Solo en CineTEC</p>
             <button
               className="client-book-btn"
               onClick={() => openModal(heroMovie)}
@@ -218,29 +218,25 @@ function ClientMainPage() {
             </div>
           </div>
 
+           {/* Dulcería */}
           <div className="client-hero-dulceria">
-            <p className="client-dulceria-label">Datos sincronizados</p>
+            <p className="client-dulceria-label">Dulcería</p>
             <ul className="client-dulceria-list">
-              <li className="client-dulceria-item">
-                <span className="client-dulceria-name">Movie ID</span>
-                <span className="client-dulceria-price">{heroMovie.movieID}</span>
-              </li>
-              <li className="client-dulceria-item">
-                <span className="client-dulceria-name">Original Name</span>
-                <span className="client-dulceria-price">{heroMovie.originalName || "No definido"}</span>
-              </li>
-              <li className="client-dulceria-item">
-                <span className="client-dulceria-name">Director</span>
-                <span className="client-dulceria-price">{heroMovie.director}</span>
-              </li>
-              <li className="client-dulceria-item">
-                <span className="client-dulceria-name">Duration</span>
-                <span className="client-dulceria-price">{heroMovie.duration}</span>
-              </li>
+              {[
+                { emoji: '🍿', name: 'Palomitas grandes', price: '₡2.800' },
+                { emoji: '🥤', name: 'Refresco mediano', price: '₡1.500' },
+                { emoji: '🌮', name: 'Nachos con queso', price: '₡3.200' },
+                { emoji: '🍬', name: 'Dulces surtidos', price: '₡1.200' },
+                { emoji: '☕', name: 'Café americano', price: '₡1.800' },
+              ].map((item) => (
+                <li className="client-dulceria-item" key={item.name}>
+                  <span className="client-dulceria-emoji">{item.emoji}</span>
+                  <span className="client-dulceria-name">{item.name}</span>
+                  <span className="client-dulceria-price">{item.price}</span>
+                </li>
+              ))}
             </ul>
-            <button className="client-dulceria-btn" type="button">
-              Peliculas activas: {movies.length}
-            </button>
+            <button className="client-dulceria-btn" type="button">Ver menú completo</button>
           </div>
         </section>
       ) : null}
@@ -248,7 +244,7 @@ function ClientMainPage() {
       <div className="client-billboard-wrap">
         <main className="client-billboard">
           <div className="client-billboard-header">
-            <h2 className="client-billboard-title">Cartelera desde base de datos</h2>
+            <h2 className="client-billboard-title">Cartelera semanal</h2>
             <span className="client-billboard-count">
               {isLoading
                 ? "Cargando..."
