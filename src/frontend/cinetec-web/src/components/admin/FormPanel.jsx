@@ -1,4 +1,5 @@
 import { ratingOptions, sectionMeta } from "../../config/adminConfig";
+import { resolveMoviePosterSource } from "../MovieCard";
 
 function FormField({ label, helper, children }) {
   return (
@@ -135,7 +136,7 @@ function renderFields(sectionKey, formData, records, onChange) {
             <div className="col-12">
               <div className="admin-image-preview">
                 <img
-                  src={formData.imagePreviewURL || formData.imageURL}
+                  src={formData.imagePreviewURL || resolveMoviePosterSource(formData)}
                   alt={formData.commercialName || formData.originalName || "Poster preview"}
                 />
               </div>

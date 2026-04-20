@@ -42,8 +42,30 @@ export function createPosterDataUri(movie) {
  * @param {{ imageURL?: string }} movie
  * @returns {string}
  */
+const movieImageModules = import.meta.glob("../assets/Images/*", {
+  eager: true,
+  import: "default",
+});
+
 export function resolveMoviePosterSource(movie) {
-  return movie.imageURL || createPosterDataUri(movie);
+  if (!movie.imageURL) {
+    return createPosterDataUri(movie);
+  }
+
+  if (
+    movie.imageURL.startsWith("http://") ||
+    movie.imageURL.startsWith("https://") ||
+    movie.imageURL.startsWith("data:") ||
+    movie.imageURL.startsWith("blob:")
+  ) {
+    return movie.imageURL;
+  }
+
+  const matchingImageEntry = Object.entries(movieImageModules).find(([path]) =>
+    path.endsWith(`/${movie.imageURL}`)
+  );
+
+  return matchingImageEntry?.[1] ?? createPosterDataUri(movie);
 }
 
 function MovieCard({ movie, onOpen }) {

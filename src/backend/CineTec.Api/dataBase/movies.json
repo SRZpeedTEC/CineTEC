@@ -8,9 +8,20 @@
     "rating": "PG",
     "director": "Santiago Boza",
     "protagonists": [
-      "Eduardo Canesa",
-      "Sergio Alvarez",
-      "Santiago Robles"
+      "Eduardo"
+    ]
+  },
+  {
+    "movieID": 2,
+    "originalName": "Mario Galaxy",
+    "commercialName": "Super Mario Galaxy The Movie",
+    "imageURL": "Mario.jpg",
+    "duration": "120 min",
+    "rating": "G",
+    "director": "Cristopher Nolan",
+    "protagonists": [
+      "Mario",
+      "Luigi"
     ]
   }
 ]

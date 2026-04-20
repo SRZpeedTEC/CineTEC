@@ -160,17 +160,23 @@ export function useAdminMainPage() {
     if (type === "file") {
       const selectedFile = files?.[0] ?? null;
 
-      setFormData((current) => {
-        revokePreviewUrl(current?.imagePreviewURL);
+      if (!selectedFile) {
+        setFormData((current) => {
+          revokePreviewUrl(current?.imagePreviewURL);
 
-        if (!selectedFile) {
           return {
             ...current,
             imageFileName: "",
             imagePreviewURL: "",
             imageURL: "",
           };
-        }
+        });
+
+        return;
+      }
+
+      setFormData((current) => {
+        revokePreviewUrl(current?.imagePreviewURL);
 
         return {
           ...current,

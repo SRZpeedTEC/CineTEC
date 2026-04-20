@@ -4,6 +4,7 @@ import {
   getPosterLabel,
   getRecordIdentifier,
 } from "../../utils/adminHelpers";
+import { resolveMoviePosterSource } from "../MovieCard";
 import FormPanel from "./FormPanel";
 
 function renderTableCells(sectionKey, row) {
@@ -30,7 +31,7 @@ function renderTableCells(sectionKey, row) {
           <td>
             {row.imageURL ? (
               <div className="admin-poster-thumb admin-poster-thumb-image">
-                <img src={row.imageURL} alt={row.commercialName || row.originalName} />
+                <img src={resolveMoviePosterSource(row)} alt={row.commercialName || row.originalName} />
               </div>
             ) : (
               <div className="admin-poster-thumb">
