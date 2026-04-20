@@ -7,6 +7,13 @@ import {
 import { resolveMoviePosterSource } from "../MovieCard";
 import FormPanel from "./FormPanel";
 
+/**
+ * Renders the data cells for one row in the active admin table.
+ *
+ * @param {string} sectionKey
+ * @param {Record<string, any>} row
+ * @returns {JSX.Element | null}
+ */
 function renderTableCells(sectionKey, row) {
   switch (sectionKey) {
     case "clientes":
@@ -135,12 +142,14 @@ export default function ManagementSection({
   const meta = sectionMeta[sectionKey];
   const rows = records[sectionKey];
   const isFormOpen = panelState.isOpen && panelState.sectionKey === sectionKey;
+  // When an admin searches by ID, we intentionally narrow the table to that single persisted record.
   const visibleRows =
     sectionKey === "peliculas" && movieSearchResult ? [movieSearchResult] : rows;
 
   return (
     <section className="admin-section-panel">
       <div className={`admin-workspace ${isFormOpen ? "admin-workspace-split" : ""}`}>
+        {/* Main workspace: header actions, feedback, and table stay together so the section reads as one flow. */}
         <div className="admin-workspace-main">
           <div className="card border-0 admin-table-card">
             <div className="card-body p-0">
@@ -165,6 +174,7 @@ export default function ManagementSection({
                 {sectionKey === "peliculas" ? (
                   <div className="admin-search-row">
                     <div className="admin-search-group">
+                      {/* The movie search is intentionally ID-based so admin users can verify exact records quickly. */}
                       <input
                         className="admin-search-input"
                         type="search"
@@ -271,6 +281,7 @@ export default function ManagementSection({
           </div>
         </div>
 
+        {/* Side shell: mounted only for the active section so hidden forms do not carry stale edits across tabs. */}
         <div className={`admin-form-shell ${isFormOpen ? "open" : ""}`}>
           {isFormOpen ? (
             <FormPanel

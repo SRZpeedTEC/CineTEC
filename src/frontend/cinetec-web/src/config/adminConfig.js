@@ -1,3 +1,8 @@
+/**
+ * Sidebar navigation entries for the admin workspace.
+ *
+ * @type {{ key: string, label: string, badge: string }[]}
+ */
 export const navigationItems = [
   { key: "clientes", label: "Clientes", badge: "CL" },
   { key: "peliculas", label: "Peliculas", badge: "PL" },
@@ -6,6 +11,11 @@ export const navigationItems = [
   { key: "proyecciones", label: "Proyecciones", badge: "PR" },
 ];
 
+/**
+ * Presentation metadata for each admin section.
+ *
+ * @type {Record<string, { title: string, subtitle: string, addLabel: string, columns: string[] }>}
+ */
 export const sectionMeta = {
   clientes: {
     title: "Gestion de Clientes",
@@ -56,6 +66,14 @@ export const sectionMeta = {
   },
 };
 
+/**
+ * Empty form blueprints per admin section.
+ *
+ * Keeping the initial state in one place makes it easier to add new sections
+ * without hunting through component code for default values.
+ *
+ * @type {Record<string, Record<string, string>>}
+ */
 export const emptyFormBySection = {
   clientes: {
     ID: "",
@@ -100,4 +118,9 @@ export const emptyFormBySection = {
   },
 };
 
+/**
+ * Allowed movie rating values shown in the admin form.
+ *
+ * @type {string[]}
+ */
 export const ratingOptions = ["G", "PG", "PG-13", "R", "NC-17"];

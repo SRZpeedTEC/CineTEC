@@ -4,11 +4,18 @@ using CineTec.Api.Models;
 
 namespace CineTec.Api.Controllers
 {
+    /// <summary>
+    /// Exposes CRUD endpoints for room management.
+    /// </summary>
     [ApiController]
     [Route("api/[controller]")]
     public class RoomsController : ControllerBase
     {
-        // POST: api/rooms
+        /// <summary>
+        /// Creates a new room.
+        /// </summary>
+        /// <param name="room">Room payload received from the client.</param>
+        /// <returns>The created room response.</returns>
         [HttpPost]
         public ActionResult<Room> CreateRoom([FromBody] Room room)
         {
@@ -24,7 +31,12 @@ namespace CineTec.Api.Controllers
                 createdRoom);
         }
 
-        // GET: api/rooms/{cinemaId}/{roomNumber}
+        /// <summary>
+        /// Gets one room by its composite key.
+        /// </summary>
+        /// <param name="cinemaId">Branch identifier.</param>
+        /// <param name="roomNumber">Room number.</param>
+        /// <returns>The matching room response.</returns>
         [HttpGet("{cinemaId}/{roomNumber}")]
         public ActionResult<Room> GetRoom(string cinemaId, int roomNumber)
         {
@@ -38,21 +50,34 @@ namespace CineTec.Api.Controllers
             return Ok(room);
         }
 
-        // GET: api/rooms
+        /// <summary>
+        /// Returns every room.
+        /// </summary>
+        /// <returns>A collection of rooms.</returns>
         [HttpGet]
         public ActionResult<List<Room>> GetAll()
         {
             return Ok(RoomService.GetAllRooms());
         }
 
-        // GET: api/rooms/cinema/{cinemaId}
+        /// <summary>
+        /// Returns rooms for a given cinema branch.
+        /// </summary>
+        /// <param name="cinemaId">Branch identifier.</param>
+        /// <returns>A collection of rooms.</returns>
         [HttpGet("cinema/{cinemaId}")]
         public ActionResult<List<Room>> GetByCinema(string cinemaId)
         {
             return Ok(RoomService.GetRoomsByCinema(cinemaId));
         }
 
-        // PUT: api/rooms/{cinemaId}/{roomNumber}
+        /// <summary>
+        /// Updates an existing room.
+        /// </summary>
+        /// <param name="cinemaId">Branch identifier.</param>
+        /// <param name="roomNumber">Room number.</param>
+        /// <param name="room">Updated room payload.</param>
+        /// <returns>The updated room response.</returns>
         [HttpPut("{cinemaId}/{roomNumber}")]
         public ActionResult<Room> UpdateRoom(string cinemaId, int roomNumber, [FromBody] Room room)
         {
@@ -66,7 +91,12 @@ namespace CineTec.Api.Controllers
             return Ok(updatedRoom);
         }
 
-        // DELETE: api/rooms/{cinemaId}/{roomNumber}
+        /// <summary>
+        /// Deletes a room by its composite key.
+        /// </summary>
+        /// <param name="cinemaId">Branch identifier.</param>
+        /// <param name="roomNumber">Room number.</param>
+        /// <returns>No content when the room is removed.</returns>
         [HttpDelete("{cinemaId}/{roomNumber}")]
         public IActionResult DeleteRoom(string cinemaId, int roomNumber)
         {

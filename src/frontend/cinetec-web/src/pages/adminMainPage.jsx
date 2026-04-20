@@ -4,6 +4,11 @@ import { navigationItems } from "../config/adminConfig";
 import { useAdminMainPage } from "../hooks/useAdminMainPage";
 import ManagementSection from "../components/admin/ManagementSection";
 
+/**
+ * Renders the main admin workspace shell.
+ *
+ * @returns {JSX.Element}
+ */
 export default function AdminMainPage() {
   const {
     activeTab,
@@ -29,6 +34,7 @@ export default function AdminMainPage() {
 
   return (
     <div className="admin-shell">
+      {/* Sidebar navigation stays fixed so operators can jump between sections without losing context. */}
       <aside className="admin-sidebar">
         <div className="admin-sidebar-inner">
           <div className="admin-brand">
@@ -59,6 +65,7 @@ export default function AdminMainPage() {
 
       <main className="admin-main-content">
         <div className="container-fluid px-3 px-lg-4 px-xxl-5 py-4 py-lg-5">
+          {/* ManagementSection owns the table/form pair so each tab reuses the same interaction model. */}
           <ManagementSection
             sectionKey={activeTab}
             records={records}

@@ -42,6 +42,7 @@ export function calculateRoomCapacities(rows, columns, capacityFactor = 100) {
   const parsedFactor = Number(capacityFactor);
 
   if (!parsedRows || !parsedColumns) {
+    // Empty strings are common while the user is still typing, so we return blanks instead of misleading zeroes.
     return { total_capacity: "", max_capacity: "" };
   }
 
@@ -97,8 +98,10 @@ export function getPosterLabel(movie) {
 }
 
 /**
- * Converts a selected image file into a Data URL so it can be previewed and
- * sent to the backend as `imageURL`.
+ * Converts a selected image file into a Data URL.
+ *
+ * This helper is still useful for preview-oriented flows, even though the
+ * current movie payload only stores the filename reference.
  *
  * @param {File} file
  * @returns {Promise<string>}
@@ -186,6 +189,7 @@ export function createFormState(sectionKey, records, record = null) {
 
   if (!record) {
     if (sectionKey === "peliculas") {
+      // Pre-filling the next ID helps the admin see the expected key before saving.
       const nextMovieId = Math.max(0, ...records.peliculas.map((movie) => Number(movie.movieID) || 0)) + 1;
       base.movieID = nextMovieId;
     }
@@ -202,6 +206,7 @@ export function createFormState(sectionKey, records, record = null) {
     return {
       ...base,
       ...record,
+      // The textarea works best with human-friendly comma-separated text, not the raw array shape.
       protagonists: formatProtagonistsInput(record.protagonists),
       imageFileName: "",
       imagePreviewURL: record.imageURL ?? "",
@@ -243,6 +248,7 @@ export function normalizeSectionRecord(sectionKey, formData) {
       };
 
     case "salas": {
+      // Reusing the shared capacity helper keeps room calculations consistent between typing and saving.
       const capacities = calculateRoomCapacities(
         formData.number_of_rows,
         formData.number_of_columns,

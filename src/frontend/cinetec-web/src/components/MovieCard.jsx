@@ -36,17 +36,23 @@ export function createPosterDataUri(movie) {
   return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(posterSvg)}`;
 }
 
-/**
- * Returns the best poster source for a movie.
- *
- * @param {{ imageURL?: string }} movie
- * @returns {string}
- */
+// Vite resolves these imports at build time, which lets us map persisted filenames to bundled image assets.
 const movieImageModules = import.meta.glob("../assets/Images/*", {
   eager: true,
   import: "default",
 });
 
+/**
+ * Returns the best poster source for a movie.
+ *
+ * @param {{
+ *   imageURL?: string,
+ *   title?: string,
+ *   subtitle?: string,
+ *   posterTheme?: { from: string, to: string, accent: string },
+ * }} movie
+ * @returns {string}
+ */
 export function resolveMoviePosterSource(movie) {
   if (!movie.imageURL) {
     return createPosterDataUri(movie);
@@ -61,6 +67,7 @@ export function resolveMoviePosterSource(movie) {
     return movie.imageURL;
   }
 
+  // Vite needs imported assets to be discoverable at build time, so we resolve stored filenames through import.meta.glob.
   const matchingImageEntry = Object.entries(movieImageModules).find(([path]) =>
     path.endsWith(`/${movie.imageURL}`)
   );
@@ -68,6 +75,22 @@ export function resolveMoviePosterSource(movie) {
   return matchingImageEntry?.[1] ?? createPosterDataUri(movie);
 }
 
+/**
+ * Renders a movie poster card used across the client billboard.
+ *
+ * @param {{
+ *   movie: {
+ *     movieID: number,
+ *     title: string,
+ *     rating: string,
+ *     imageURL?: string,
+ *     subtitle?: string,
+ *     posterTheme?: { from: string, to: string, accent: string },
+ *   },
+ *   onOpen: (movie: unknown) => void,
+ * }} props
+ * @returns {JSX.Element}
+ */
 function MovieCard({ movie, onOpen }) {
   return (
     <button className="client-poster-card" type="button" onClick={() => onOpen(movie)}>

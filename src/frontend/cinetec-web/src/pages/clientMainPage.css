@@ -1,4 +1,5 @@
 /* ─── Palette: white + black ──────────────────────────────────────────────── */
+/* --- Client Theme Tokens --- */
 :root {
   --client-bg:           #ffffff;
   --client-surface:      #f7f7f7;
@@ -13,6 +14,7 @@
   --client-border-light: #dddddd;
 }
 
+/* --- Base Page --- */
 body {
   background: var(--client-bg);
   color: var(--client-text);
@@ -29,6 +31,7 @@ body {
 }
 
 /* ─── Navbar ──────────────────────────────────────────────────────────────── */
+/* --- Navbar --- */
 .client-navbar-wrap {
   position: sticky;
   top: 0;
@@ -106,6 +109,7 @@ body {
 }
 
 /* ─── Hero carousel ───────────────────────────────────────────────────────── */
+/* --- Hero Carousel --- */
 .client-hero {
   display: grid;
   grid-template-columns: 420px 1fr 260px;
@@ -132,6 +136,7 @@ body {
 }
 
 /* ─── Dulcería panel ──────────────────────────────────────────────────────── */
+/* --- Concessions Panel --- */
 .client-hero-dulceria {
   display: flex;
   flex-direction: column;
@@ -274,6 +279,7 @@ body {
 }
 
 /* Progress dots */
+/* --- Hero Dots --- */
 .client-hero-dots {
   display: flex;
   gap: 0.5rem;
@@ -296,6 +302,7 @@ body {
 }
 
 /* ─── Book / confirm button ───────────────────────────────────────────────── */
+/* --- Primary Action Button --- */
 .client-book-btn {
   align-self: flex-start;
   padding: 0.65rem 1.8rem;
@@ -321,6 +328,7 @@ body {
 }
 
 /* ─── Billboard ───────────────────────────────────────────────────────────── */
+/* --- Billboard --- */
 .client-billboard-wrap {
   background: #2a0c0c;
 }
@@ -357,6 +365,7 @@ body {
 }
 
 /* ─── Poster grid ─────────────────────────────────────────────────────────── */
+/* --- Poster Grid --- */
 .client-poster-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
@@ -436,6 +445,7 @@ body {
 }
 
 /* ─── Shared ──────────────────────────────────────────────────────────────── */
+/* --- Shared Helpers --- */
 .client-card-label {
   font-family: 'Share Tech Mono', 'Courier New', monospace;
   font-size: 0.68rem;
@@ -456,6 +466,7 @@ body {
 }
 
 /* ─── Modal ───────────────────────────────────────────────────────────────── */
+/* --- Modal --- */
 .client-modal-overlay {
   position: fixed;
   inset: 0;
@@ -565,6 +576,7 @@ body {
 }
 
 /* ─── Seat view ───────────────────────────────────────────────────────────── */
+/* --- Seat Selection --- */
 .client-seats-view {
   grid-column: 1 / -1;
   display: flex;
@@ -776,6 +788,7 @@ body {
 }
 
 /* ─── Responsive ──────────────────────────────────────────────────────────── */
+/* --- Responsive Layout --- */
 @media (max-width: 1024px) {
   .client-hero { grid-template-columns: 380px 1fr; }
   .client-hero-dulceria { display: none; }

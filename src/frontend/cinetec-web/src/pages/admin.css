@@ -1,3 +1,4 @@
+/* --- Admin Theme Tokens --- */
 :root {
   --admin-bg: #000000;
   --admin-bg-deep: #000000;
@@ -19,6 +20,7 @@
   --admin-search-placeholder: #CACBCC;
 }
 
+/* --- Base Layout --- */
 body {
   background: var(--admin-bg);
   color: var(--admin-text);
@@ -30,6 +32,7 @@ body {
   background: transparent;
 }
 
+/* --- Sidebar --- */
 .admin-sidebar {
   position: fixed;
   top: 0;
@@ -144,6 +147,7 @@ body {
 }
 
 
+/* --- Main Workspace --- */
 .admin-main-content {
   min-height: 100vh;
   margin-left: 300px;
@@ -188,6 +192,7 @@ body {
   line-height: 1.65;
 }
 
+/* --- Cards And Metrics --- */
 .admin-hero-card,
 .admin-table-card,
 .admin-side-card,
@@ -331,6 +336,7 @@ body {
   border-color: var(--admin-border-strong);
 }
 
+/* --- Data Table --- */
 .admin-table-header {
   border-color: var(--admin-border) !important;
 }
@@ -449,6 +455,7 @@ body {
   cursor: wait;
 }
 
+/* --- Buttons And Actions --- */
 .admin-btn {
   border-radius: 0;
   padding: 0.72rem 1.1rem;
@@ -544,6 +551,7 @@ body {
   line-height: 1.45;
 }
 
+/* --- Split Workspace And Form Panel --- */
 .admin-workspace {
   display: grid;
   grid-template-columns: minmax(0, 1fr) 0;
@@ -662,6 +670,7 @@ body {
   object-fit: cover;
 }
 
+/* --- Alerts And Empty States --- */
 .admin-alert {
   border-radius: 0;
   border-width: 2px;
@@ -697,6 +706,7 @@ body {
   font-family: 'Share Tech Mono', 'Courier New', monospace;
 }
 
+/* --- Login Screen --- */
 .admin-login-container {
   min-height: 100vh;
   display: flex;
@@ -770,6 +780,7 @@ body {
   box-shadow: 4px 4px 0px rgba(255, 255, 255, 0.4);
 }
 
+/* --- Responsive Layout --- */
 @media (max-width: 1199.98px) {
   .admin-sidebar {
     width: 270px;

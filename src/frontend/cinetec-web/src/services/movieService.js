@@ -34,6 +34,7 @@ export function normalizeMovie(movie) {
         .map((item) => item.trim())
         .filter(Boolean);
 
+  // This normalizer is intentionally forgiving because movies can originate from forms, API responses, or seed data.
   return {
     movieID: Number(movie?.movieID ?? movie?.MovieID ?? movie?.id ?? 0),
     originalName: String(movie?.originalName ?? movie?.Original_name ?? ""),
@@ -65,6 +66,7 @@ export function toMoviePayload(movie) {
   const normalizedMovie = normalizeMovie(movie);
 
   return {
+    // The backend expects a numeric ID, so we coerce here instead of trusting raw form strings.
     ...normalizedMovie,
     movieID: Number.isFinite(normalizedMovie.movieID) ? normalizedMovie.movieID : 0,
   };
@@ -173,6 +175,7 @@ export function toClientMovieCard(movie, index = 0) {
     director: normalizedMovie.director || "Sin director registrado",
     protagonists: normalizedMovie.protagonists,
     imageURL: normalizedMovie.imageURL,
+    // Rotating poster themes gives placeholder posters enough variety to feel intentional during incomplete datasets.
     posterTheme: POSTER_THEMES[index % POSTER_THEMES.length],
   };
 }

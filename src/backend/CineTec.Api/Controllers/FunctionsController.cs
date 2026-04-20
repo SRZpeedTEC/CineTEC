@@ -4,11 +4,18 @@ using CineTec.Api.Models;
 
 namespace CineTec.Api.Controllers
 {
+    /// <summary>
+    /// Exposes CRUD endpoints for movie projections.
+    /// </summary>
     [ApiController]
     [Route("api/[controller]")]
     public class FunctionsController : ControllerBase
     {
-        // POST: api/functions
+        /// <summary>
+        /// Creates a new projection.
+        /// </summary>
+        /// <param name="function">Projection payload received from the client.</param>
+        /// <returns>The created projection response.</returns>
         [HttpPost]
         public ActionResult<Function> CreateFunction([FromBody] Function function)
         {
@@ -29,7 +36,13 @@ namespace CineTec.Api.Controllers
                 createdFunction);
         }
 
-        // GET: api/functions/{movieId}/{roomNumber}/{datetime}
+        /// <summary>
+        /// Gets one projection by its composite key.
+        /// </summary>
+        /// <param name="movieId">Movie identifier.</param>
+        /// <param name="roomNumber">Room number.</param>
+        /// <param name="datetime">Projection date and time.</param>
+        /// <returns>The matching projection response.</returns>
         [HttpGet("{movieId}/{roomNumber}/{datetime}")]
         public ActionResult<Function> GetFunction(string movieId, int roomNumber, DateTime datetime)
         {
@@ -43,28 +56,46 @@ namespace CineTec.Api.Controllers
             return Ok(function);
         }
 
-        // GET: api/functions
+        /// <summary>
+        /// Returns every projection.
+        /// </summary>
+        /// <returns>A collection of projections.</returns>
         [HttpGet]
         public ActionResult<List<Function>> GetAll()
         {
             return Ok(FunctionService.GetAllFunctions());
         }
 
-        // GET: api/functions/movie/{movieId}
+        /// <summary>
+        /// Returns projections for a given movie.
+        /// </summary>
+        /// <param name="movieId">Movie identifier.</param>
+        /// <returns>A collection of projections.</returns>
         [HttpGet("movie/{movieId}")]
         public ActionResult<List<Function>> GetByMovie(string movieId)
         {
             return Ok(FunctionService.GetFunctionsByMovie(movieId));
         }
 
-        // GET: api/functions/room/{roomNumber}
+        /// <summary>
+        /// Returns projections scheduled in a given room.
+        /// </summary>
+        /// <param name="roomNumber">Room number.</param>
+        /// <returns>A collection of projections.</returns>
         [HttpGet("room/{roomNumber}")]
         public ActionResult<List<Function>> GetByRoom(int roomNumber)
         {
             return Ok(FunctionService.GetFunctionsByRoom(roomNumber));
         }
 
-        // PUT: api/functions/{movieId}/{roomNumber}/{datetime}
+        /// <summary>
+        /// Updates an existing projection.
+        /// </summary>
+        /// <param name="movieId">Movie identifier.</param>
+        /// <param name="roomNumber">Room number.</param>
+        /// <param name="datetime">Projection date and time.</param>
+        /// <param name="function">Updated projection payload.</param>
+        /// <returns>The updated projection response.</returns>
         [HttpPut("{movieId}/{roomNumber}/{datetime}")]
         public ActionResult<Function> UpdateFunction(
             string movieId,
@@ -82,7 +113,13 @@ namespace CineTec.Api.Controllers
             return Ok(updatedFunction);
         }
 
-        // DELETE: api/functions/{movieId}/{roomNumber}/{datetime}
+        /// <summary>
+        /// Deletes a projection by its composite key.
+        /// </summary>
+        /// <param name="movieId">Movie identifier.</param>
+        /// <param name="roomNumber">Room number.</param>
+        /// <param name="datetime">Projection date and time.</param>
+        /// <returns>No content when the projection is removed.</returns>
         [HttpDelete("{movieId}/{roomNumber}/{datetime}")]
         public IActionResult DeleteFunction(string movieId, int roomNumber, DateTime datetime)
         {

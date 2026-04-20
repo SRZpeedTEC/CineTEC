@@ -19,28 +19,7 @@ export const initialRecords = {
       Minit: "S",
     },
   ],
-  peliculas: [
-    {
-      movieID: 101,
-      originalName: "Midnight Signal",
-      commercialName: "Senal de Medianoche",
-      imageURL: "https://images.unsplash.com/photo-1517604931442-7e0c8ed2963c",
-      duration: "128 min",
-      rating: "PG-13",
-      director: "Camila Soto",
-      protagonists: ["Elena Ruiz", "Noah Vega"],
-    },
-    {
-      movieID: 102,
-      originalName: "Velvet Heist",
-      commercialName: "Golpe de Terciopelo",
-      imageURL: "https://images.unsplash.com/photo-1489599849927-2ee91cede3ba",
-      duration: "116 min",
-      rating: "R",
-      director: "Sergio Valverde",
-      protagonists: ["Lucia Prado", "Marco Diaz"],
-    },
-  ],
+  
   sucursales: [
     {
       name: "CineTEC Escazu",

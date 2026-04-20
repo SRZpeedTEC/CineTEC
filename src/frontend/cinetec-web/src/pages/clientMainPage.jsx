@@ -8,11 +8,20 @@ import "./clientMainPage.css";
 
 const mockRoom = { rows: 12, cols: 10 };
 
+/**
+ * Generates a deterministic seat map for the current prototype booking flow.
+ *
+ * @param {number} rows
+ * @param {number} cols
+ * @param {number} seed
+ * @returns {{ id: string, row: number, col: number, occupied: boolean }[]}
+ */
 function generateSeats(rows, cols, seed) {
   const seats = [];
 
   for (let row = 0; row < rows; row += 1) {
     for (let column = 0; column < cols; column += 1) {
+      // A seeded pattern keeps the demo predictable, which makes UI testing much less frustrating.
       const id = `${String.fromCharCode(65 + row)}${column + 1}`;
       const hash = (seed * 31 + row * 17 + column * 7) % 100;
       seats.push({ id, row, col: column, occupied: hash < 30 });
@@ -65,6 +74,7 @@ function ClientMainPage() {
           setMovies(
             apiMovies.map((movie, index) => ({
               ...toClientMovieCard(movie, index),
+              // Cinemas still come from local branch records until a dedicated cinema API is wired into this screen.
               cinemas: initialRecords.sucursales.map((cinema) => cinema.name),
             }))
           );
@@ -100,6 +110,7 @@ function ClientMainPage() {
       return;
     }
 
+    // If the list shrinks after filtering or reloading, we clamp the hero index to avoid reading past the array.
     setHeroIndex((currentIndex) => Math.min(currentIndex, movies.length - 1));
   }, [movies]);
 
@@ -140,6 +151,7 @@ function ClientMainPage() {
   const heroMovie = filteredMovies[heroIndex] ?? movies[heroIndex] ?? null;
 
   function openModal(movie) {
+    // Opening a new movie always resets booking state so seats from a previous selection do not leak across movies.
     setModalMovie(movie);
     setBookingSession(null);
     setSelectedSeats([]);
@@ -157,6 +169,7 @@ function ClientMainPage() {
     }
 
     setBookingSession(session);
+    // The movie ID works as a stable seed, so each movie gets a repeatable seat pattern for demos.
     setSeats(generateSeats(mockRoom.rows, mockRoom.cols, modalMovie.movieID));
     setSelectedSeats([]);
   }
@@ -175,6 +188,7 @@ function ClientMainPage() {
 
   return (
     <div className="client-main-page">
+      {/* Global navbar: filters and search stay available while the rest of the page reflows underneath. */}
       <ClientNavbar
         cinemas={cinemaOptions}
         logo={logo}
@@ -227,7 +241,7 @@ function ClientMainPage() {
             </div>
           </div>
 
-           {/* Dulcería */}
+          {/* Side promo panel: this keeps concession items visible without mixing them into the movie metadata itself. */}
           <div className="client-hero-dulceria">
             <p className="client-dulceria-label">Dulcería</p>
             <ul className="client-dulceria-list">
@@ -304,6 +318,7 @@ function ClientMainPage() {
 
             {!bookingSession ? (
               <>
+                {/* Movie detail state: first step lets the user review the title before committing to a time. */}
                 <img
                   alt={`${modalMovie.title} poster`}
                   className="client-modal-poster"
@@ -338,86 +353,89 @@ function ClientMainPage() {
                 </div>
               </>
             ) : (
-              <div className="client-seats-view">
-                <div className="client-seats-header">
-                  <button
-                    className="client-seats-back"
-                    onClick={() => {
-                      setBookingSession(null);
-                      setSelectedSeats([]);
-                    }}
-                    type="button"
-                  >
-                    &#8592; Volver
-                  </button>
-                  <div className="client-seats-title-block">
-                    <span className="client-modal-title">{modalMovie.title}</span>
-                    <span className="client-tag">{bookingSession}</span>
+              <>
+                {/* Seat selection lives in the same modal so users do not lose the context of the movie they picked. */}
+                <div className="client-seats-view">
+                  <div className="client-seats-header">
+                    <button
+                      className="client-seats-back"
+                      onClick={() => {
+                        setBookingSession(null);
+                        setSelectedSeats([]);
+                      }}
+                      type="button"
+                    >
+                      &#8592; Volver
+                    </button>
+                    <div className="client-seats-title-block">
+                      <span className="client-modal-title">{modalMovie.title}</span>
+                      <span className="client-tag">{bookingSession}</span>
+                    </div>
                   </div>
-                </div>
 
-                <div className="client-screen-wrap">
-                  <div className="client-screen" />
-                  <span className="client-screen-label">PANTALLA</span>
-                </div>
-
-                <div className="client-seat-grid">
-                  <div className="client-seat-row">
-                    <span className="client-row-label" />
-                    {Array.from({ length: mockRoom.cols }, (_, column) => (
-                      <span className="client-col-label" key={column}>
-                        {column + 1}
-                      </span>
-                    ))}
+                  <div className="client-screen-wrap">
+                    <div className="client-screen" />
+                    <span className="client-screen-label">PANTALLA</span>
                   </div>
-                  {rowLabels.map((label, rowIndex) => (
-                    <div className="client-seat-row" key={label}>
-                      <span className="client-row-label">{label}</span>
-                      {seats.filter((seat) => seat.row === rowIndex).map((seat) => (
-                        <button
-                          className={[
-                            "client-seat",
-                            seat.occupied ? "seat-occupied" : "",
-                            selectedSeats.includes(seat.id) ? "seat-selected" : "",
-                          ].join(" ")}
-                          disabled={seat.occupied}
-                          key={seat.id}
-                          onClick={() => toggleSeat(seat)}
-                          title={seat.id}
-                          type="button"
-                        />
+
+                  <div className="client-seat-grid">
+                    <div className="client-seat-row">
+                      <span className="client-row-label" />
+                      {Array.from({ length: mockRoom.cols }, (_, column) => (
+                        <span className="client-col-label" key={column}>
+                          {column + 1}
+                        </span>
                       ))}
                     </div>
-                  ))}
-                </div>
+                    {rowLabels.map((label, rowIndex) => (
+                      <div className="client-seat-row" key={label}>
+                        <span className="client-row-label">{label}</span>
+                        {seats.filter((seat) => seat.row === rowIndex).map((seat) => (
+                          <button
+                            className={[
+                              "client-seat",
+                              seat.occupied ? "seat-occupied" : "",
+                              selectedSeats.includes(seat.id) ? "seat-selected" : "",
+                            ].join(" ")}
+                            disabled={seat.occupied}
+                            key={seat.id}
+                            onClick={() => toggleSeat(seat)}
+                            title={seat.id}
+                            type="button"
+                          />
+                        ))}
+                      </div>
+                    ))}
+                  </div>
 
-                <div className="client-seat-legend">
-                  <span className="client-legend-item">
-                    <span className="client-legend-box legend-available" /> Disponible
-                  </span>
-                  <span className="client-legend-item">
-                    <span className="client-legend-box legend-occupied" /> Ocupado
-                  </span>
-                  <span className="client-legend-item">
-                    <span className="client-legend-box legend-selected" /> Seleccionado
-                  </span>
-                </div>
+                  <div className="client-seat-legend">
+                    <span className="client-legend-item">
+                      <span className="client-legend-box legend-available" /> Disponible
+                    </span>
+                    <span className="client-legend-item">
+                      <span className="client-legend-box legend-occupied" /> Ocupado
+                    </span>
+                    <span className="client-legend-item">
+                      <span className="client-legend-box legend-selected" /> Seleccionado
+                    </span>
+                  </div>
 
-                <div className="client-seats-footer">
-                  <span className="client-seats-count">
-                    {selectedSeats.length > 0
-                      ? `${selectedSeats.length} asiento${selectedSeats.length > 1 ? "s" : ""}: ${selectedSeats.join(", ")}`
-                      : "Ningun asiento seleccionado"}
-                  </span>
-                  <button
-                    className="client-book-btn"
-                    disabled={selectedSeats.length === 0}
-                    type="button"
-                  >
-                    Confirmar
-                  </button>
+                  <div className="client-seats-footer">
+                    <span className="client-seats-count">
+                      {selectedSeats.length > 0
+                        ? `${selectedSeats.length} asiento${selectedSeats.length > 1 ? "s" : ""}: ${selectedSeats.join(", ")}`
+                        : "Ningun asiento seleccionado"}
+                    </span>
+                    <button
+                      className="client-book-btn"
+                      disabled={selectedSeats.length === 0}
+                      type="button"
+                    >
+                      Confirmar
+                    </button>
+                  </div>
                 </div>
-              </div>
+              </>
             )}
           </div>
         </div>

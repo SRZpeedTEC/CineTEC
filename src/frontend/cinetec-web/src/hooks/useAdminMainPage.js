@@ -77,6 +77,7 @@ export function useAdminMainPage() {
           return;
         }
 
+        // We keep the local seed data as a safety net so the admin view still has rows if the API returns nothing.
         setRecords((current) => ({
           ...current,
           peliculas: movies.length > 0 ? movies : current.peliculas,
@@ -101,17 +102,32 @@ export function useAdminMainPage() {
     };
   }, []);
 
+  /**
+   * Releases temporary object URLs created for local image previews.
+   *
+   * @param {string | undefined | null} previewUrl
+   * @returns {void}
+   */
   function revokePreviewUrl(previewUrl) {
     if (previewUrl?.startsWith("blob:")) {
       URL.revokeObjectURL(previewUrl);
     }
   }
 
+  /**
+   * Opens the side form for a given section and mode.
+   *
+   * @param {string} sectionKey
+   * @param {"add" | "edit"} mode
+   * @param {Record<string, unknown> | null} [record]
+   * @returns {void}
+   */
   function openForm(sectionKey, mode, record = null) {
     if (formData?.imagePreviewURL) {
       revokePreviewUrl(formData.imagePreviewURL);
     }
 
+    // Resetting the form from section state here keeps add/edit flows predictable even after tab switches.
     setActiveTab(sectionKey);
     setPanelState({
       isOpen: true,
@@ -123,6 +139,11 @@ export function useAdminMainPage() {
     setMovieApiNotice({ type: "", message: "" });
   }
 
+  /**
+   * Closes the side form and clears any temporary preview resources.
+   *
+   * @returns {void}
+   */
   function closeForm() {
     revokePreviewUrl(formData?.imagePreviewURL);
 
@@ -135,12 +156,23 @@ export function useAdminMainPage() {
     setFormData(null);
   }
 
+  /**
+   * Clears the movie-by-ID search state.
+   *
+   * @returns {void}
+   */
   function clearMovieSearch() {
     setMovieSearchId("");
     setMovieSearchResult(null);
     setMovieSearchError("");
   }
 
+  /**
+   * Switches the active admin tab and resets tab-specific UI state when needed.
+   *
+   * @param {string} nextTab
+   * @returns {void}
+   */
   function handleTabChange(nextTab) {
     setActiveTab(nextTab);
 
@@ -154,6 +186,12 @@ export function useAdminMainPage() {
     }
   }
 
+  /**
+   * Handles changes from every admin form field.
+   *
+   * @param {React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>} event
+   * @returns {Promise<void>}
+   */
   async function handleFormChange(event) {
     const { name, value, type, files } = event.target;
 
@@ -180,6 +218,7 @@ export function useAdminMainPage() {
 
         return {
           ...current,
+          // Heads up: The API payload only keeps the filename, while the blob URL exists just for this local preview session.
           imageFileName: selectedFile.name,
           imagePreviewURL: URL.createObjectURL(selectedFile),
           imageURL: selectedFile.name,
@@ -193,11 +232,13 @@ export function useAdminMainPage() {
       const next = { ...current, [name]: value };
 
       if (name === "birthdate") {
+        // Age is derived to avoid mismatches between what the user enters and what we actually store.
         const age = calculateAge(value);
         next.age = age === "" ? "" : age;
       }
 
       if (name === "number_of_rows" || name === "number_of_columns" || name === "capacity_factor") {
+        // Capacity-related fields move together, so we recompute them on every structural room change.
         const capacities = calculateRoomCapacities(
           name === "number_of_rows" ? value : next.number_of_rows,
           name === "number_of_columns" ? value : next.number_of_columns,
@@ -212,6 +253,12 @@ export function useAdminMainPage() {
     });
   }
 
+  /**
+   * Submits the current admin form for either API-backed movies or local sections.
+   *
+   * @param {React.FormEvent<HTMLFormElement>} event
+   * @returns {Promise<void>}
+   */
   async function handleSubmit(event) {
     event.preventDefault();
 
@@ -223,6 +270,7 @@ export function useAdminMainPage() {
       setIsMovieSubmitting(true);
 
       try {
+        // Normalization keeps form-friendly strings aligned with the stricter movie contract expected by the API.
         const moviePayload = normalizeMovie({
           ...formData,
           movieID: Number(formData.movieID),
@@ -291,6 +339,13 @@ export function useAdminMainPage() {
     closeForm();
   }
 
+  /**
+   * Deletes one record from the active section.
+   *
+   * @param {string} sectionKey
+   * @param {string | number} recordId
+   * @returns {Promise<void>}
+   */
   async function handleDeleteRecord(sectionKey, recordId) {
     if (sectionKey === "peliculas") {
       try {
@@ -329,12 +384,23 @@ export function useAdminMainPage() {
     }
   }
 
+  /**
+   * Updates the movie-by-ID search input and clears stale feedback.
+   *
+   * @param {string} value
+   * @returns {void}
+   */
   function handleMovieSearchInputChange(value) {
     setMovieSearchId(value);
     setMovieSearchError("");
     setMovieSearchResult(null);
   }
 
+  /**
+   * Fetches a single movie by the ID typed in the search box.
+   *
+   * @returns {Promise<void>}
+   */
   async function handleMovieSearchSubmit() {
     const normalizedMovieId = movieSearchId.trim();
 
@@ -349,6 +415,7 @@ export function useAdminMainPage() {
     setMovieApiNotice({ type: "", message: "" });
 
     try {
+      // Searching against the API gives the admin the exact persisted record instead of a client-side guess.
       const movie = await getMovieById(normalizedMovieId);
       setMovieSearchResult(movie);
     } catch (error) {

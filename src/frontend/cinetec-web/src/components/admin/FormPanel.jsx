@@ -1,6 +1,16 @@
 import { ratingOptions, sectionMeta } from "../../config/adminConfig";
 import { resolveMoviePosterSource } from "../MovieCard";
 
+/**
+ * Wraps a single admin form field with its label and optional helper text.
+ *
+ * @param {{
+ *   label: string,
+ *   helper?: string,
+ *   children: React.ReactNode,
+ * }} props
+ * @returns {JSX.Element}
+ */
 function FormField({ label, helper, children }) {
   return (
     <div className="col-12">
@@ -13,6 +23,15 @@ function FormField({ label, helper, children }) {
   );
 }
 
+/**
+ * Renders the fields for the currently selected admin section.
+ *
+ * @param {string} sectionKey
+ * @param {Record<string, unknown>} formData
+ * @param {Record<string, Array<Record<string, unknown>>>} records
+ * @param {(event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => Promise<void>} onChange
+ * @returns {JSX.Element | null}
+ */
 function renderFields(sectionKey, formData, records, onChange) {
   switch (sectionKey) {
     case "clientes":
@@ -134,6 +153,7 @@ function renderFields(sectionKey, formData, records, onChange) {
           </FormField>
           {formData.imagePreviewURL || formData.imageURL ? (
             <div className="col-12">
+              {/* The preview gives immediate feedback, even though the saved payload only keeps the filename reference. */}
               <div className="admin-image-preview">
                 <img
                   src={formData.imagePreviewURL || resolveMoviePosterSource(formData)}
@@ -404,6 +424,7 @@ export default function FormPanel({
         </div>
 
         <form onSubmit={onSubmit}>
+          {/* Keeping fields in a shared renderer lets each section stay consistent without duplicating panel layout code. */}
           <div className="row g-3">{renderFields(sectionKey, formData, records, onChange)}</div>
 
           <div className="d-flex flex-column flex-sm-row gap-2 mt-4">

@@ -24,6 +24,7 @@ export async function apiRequest(path, options = {}) {
   const response = await fetch(`${API_BASE_URL}${path}`, {
     method,
     headers: {
+      // We only send JSON headers when there is a body so GET requests stay lean and conventional.
       ...(body ? { "Content-Type": "application/json" } : {}),
       ...headers,
     },
@@ -39,6 +40,7 @@ export async function apiRequest(path, options = {}) {
     return null;
   }
 
+  // Reading as text first lets us safely handle empty JSON bodies from simple endpoints.
   const responseText = await response.text();
   return responseText ? JSON.parse(responseText) : null;
 }
