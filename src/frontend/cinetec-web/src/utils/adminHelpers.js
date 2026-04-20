@@ -202,9 +202,9 @@ export function createFormState(sectionKey, records, record = null) {
     return {
       ...base,
       ...record,
-      protagonists: Array.isArray(record.protagonists) ? [...record.protagonists] : [],
-      imageFile: null,
+      protagonists: formatProtagonistsInput(record.protagonists),
       imageFileName: "",
+      imagePreviewURL: record.imageURL ?? "",
     };
   }
 

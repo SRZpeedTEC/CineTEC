@@ -13,16 +13,12 @@ import {
   calculateAge,
   calculateRoomCapacities,
   createFormState,
-  formatProjectionDateTime,
   getRecordIdentifier,
   normalizeSectionRecord,
-  parseProtagonists,
-  readFileAsDataUrl,
 } from "../utils/adminHelpers";
 
 /**
- * Drives the admin experience for dashboard metrics, local sections, and the
- * movie API workflows.
+ * Drives the admin experience for section state and movie workflows.
  *
  * @returns {{
  *   activeTab: string,
@@ -30,8 +26,8 @@ import {
  *   records: Record<string, Array<Record<string, unknown>>>,
  *   panelState: { isOpen: boolean, sectionKey: string | null, mode: "add" | "edit", editingId: string | number | null },
  *   formData: Record<string, unknown> | null,
- *   dashboardMetrics: Array<{ label: string, value: string, accent: string }>,
- *   projectionHighlights: Array<{ movie: string, room: string, time: string, occupancy: string }>,
+ *   dashboardMetrics: Array<unknown>,
+ *   projectionHighlights: Array<unknown>,
  *   movieSearchId: string,
  *   movieSearchResult: Record<string, unknown> | null,
  *   movieSearchError: string,
@@ -50,7 +46,7 @@ import {
  * }}
  */
 export function useAdminMainPage() {
-  const [activeTab, setActiveTab] = useState("dashboard");
+  const [activeTab, setActiveTab] = useState("peliculas");
   const [records, setRecords] = useState(initialRecords);
   const [panelState, setPanelState] = useState({
     isOpen: false,
@@ -66,7 +62,9 @@ export function useAdminMainPage() {
   const [isMovieSubmitting, setIsMovieSubmitting] = useState(false);
   const [movieApiNotice, setMovieApiNotice] = useState({ type: "", message: "" });
 
-  const activeSection = activeTab === "dashboard" ? null : sectionMeta[activeTab];
+  const activeSection = sectionMeta[activeTab] ?? null;
+  const dashboardMetrics = useMemo(() => [], []);
+  const projectionHighlights = useMemo(() => [], []);
 
   useEffect(() => {
     let isMounted = true;
@@ -91,9 +89,7 @@ export function useAdminMainPage() {
 
         setMovieApiNotice({
           type: "error",
-          message: error instanceof Error
-            ? error.message
-            : "No se pudo cargar la cartelera desde el backend.",
+          message: error instanceof Error ? error.message : "No se pudo cargar la cartelera.",
         });
       }
     }
@@ -105,34 +101,17 @@ export function useAdminMainPage() {
     };
   }, []);
 
-  const dashboardMetrics = useMemo(
-    () => [
-      { label: "Clientes activos", value: `${records.clientes.length}`, accent: "primary" },
-      { label: "Peliculas en cartelera", value: `${records.peliculas.length}`, accent: "secondary" },
-      { label: "Salas operativas", value: `${records.salas.length}`, accent: "neutral" },
-      { label: "Funciones hoy", value: `${records.proyecciones.length}`, accent: "secondary" },
-    ],
-    [records]
-  );
-
-  const projectionHighlights = useMemo(
-    () =>
-      records.proyecciones.slice(0, 3).map((projection, index) => {
-        const movie = records.peliculas.find(
-          (item) => String(item.movieID) === String(projection.Movie_id)
-        );
-
-        return {
-          movie: movie?.commercialName || movie?.originalName || `Movie ${projection.Movie_id}`,
-          room: `Sala ${projection.room_number}`,
-          time: formatProjectionDateTime(projection.datetime),
-          occupancy: ["84%", "71%", "66%"][index] ?? "60%",
-        };
-      }),
-    [records]
-  );
+  function revokePreviewUrl(previewUrl) {
+    if (previewUrl?.startsWith("blob:")) {
+      URL.revokeObjectURL(previewUrl);
+    }
+  }
 
   function openForm(sectionKey, mode, record = null) {
+    if (formData?.imagePreviewURL) {
+      revokePreviewUrl(formData.imagePreviewURL);
+    }
+
     setActiveTab(sectionKey);
     setPanelState({
       isOpen: true,
@@ -145,6 +124,8 @@ export function useAdminMainPage() {
   }
 
   function closeForm() {
+    revokePreviewUrl(formData?.imagePreviewURL);
+
     setPanelState({
       isOpen: false,
       sectionKey: null,
@@ -179,23 +160,26 @@ export function useAdminMainPage() {
     if (type === "file") {
       const selectedFile = files?.[0] ?? null;
 
-      if (!selectedFile) {
-        setFormData((current) => ({
-          ...current,
-          imageFile: null,
-          imageFileName: "",
-          imageURL: "",
-        }));
-        return;
-      }
+      setFormData((current) => {
+        revokePreviewUrl(current?.imagePreviewURL);
 
-      const imageURL = await readFileAsDataUrl(selectedFile);
-      setFormData((current) => ({
-        ...current,
-        imageFile: selectedFile,
-        imageFileName: selectedFile.name,
-        imageURL,
-      }));
+        if (!selectedFile) {
+          return {
+            ...current,
+            imageFileName: "",
+            imagePreviewURL: "",
+            imageURL: "",
+          };
+        }
+
+        return {
+          ...current,
+          imageFileName: selectedFile.name,
+          imagePreviewURL: URL.createObjectURL(selectedFile),
+          imageURL: selectedFile.name,
+        };
+      });
+
       return;
     }
 
@@ -218,10 +202,6 @@ export function useAdminMainPage() {
         next.max_capacity = capacities.max_capacity;
       }
 
-      if (name === "protagonists") {
-        next.protagonists = parseProtagonists(value);
-      }
-
       return next;
     });
   }
@@ -240,6 +220,7 @@ export function useAdminMainPage() {
         const moviePayload = normalizeMovie({
           ...formData,
           movieID: Number(formData.movieID),
+          protagonists: formData.protagonists,
         });
 
         const savedMovie =
@@ -273,9 +254,7 @@ export function useAdminMainPage() {
       } catch (error) {
         setMovieApiNotice({
           type: "error",
-          message: error instanceof Error
-            ? error.message
-            : "No se pudo guardar la pelicula.",
+          message: error instanceof Error ? error.message : "No se pudo guardar la pelicula.",
         });
       } finally {
         setIsMovieSubmitting(false);
@@ -327,9 +306,7 @@ export function useAdminMainPage() {
       } catch (error) {
         setMovieApiNotice({
           type: "error",
-          message: error instanceof Error
-            ? error.message
-            : "No se pudo eliminar la pelicula.",
+          message: error instanceof Error ? error.message : "No se pudo eliminar la pelicula.",
         });
       }
     } else {

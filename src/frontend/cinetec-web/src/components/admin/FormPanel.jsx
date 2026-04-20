@@ -1,5 +1,4 @@
 import { ratingOptions, sectionMeta } from "../../config/adminConfig";
-import { formatProtagonistsInput } from "../../utils/adminHelpers";
 
 function FormField({ label, helper, children }) {
   return (
@@ -121,7 +120,7 @@ function renderFields(sectionKey, formData, records, onChange) {
             helper={
               formData.imageFileName
                 ? `Archivo seleccionado: ${formData.imageFileName}`
-                : "Selecciona una imagen local y el sistema guardara el imageURL automaticamente."
+                : "Selecciona una imagen local para asociarla a la pelicula."
             }
           >
             <input
@@ -132,11 +131,11 @@ function renderFields(sectionKey, formData, records, onChange) {
               onChange={onChange}
             />
           </FormField>
-          {formData.imageURL ? (
+          {formData.imagePreviewURL || formData.imageURL ? (
             <div className="col-12">
               <div className="admin-image-preview">
                 <img
-                  src={formData.imageURL}
+                  src={formData.imagePreviewURL || formData.imageURL}
                   alt={formData.commercialName || formData.originalName || "Poster preview"}
                 />
               </div>
@@ -175,11 +174,11 @@ function renderFields(sectionKey, formData, records, onChange) {
               onChange={onChange}
             />
           </FormField>
-          <FormField label="Protagonists" helper="Separalos con comas para generar el arreglo del backend.">
+          <FormField label="Protagonists" helper="Escribe los nombres separados por comas.">
             <textarea
               className="form-control admin-form-control admin-form-textarea"
               name="protagonists"
-              value={formatProtagonistsInput(formData.protagonists)}
+              value={formData.protagonists}
               onChange={onChange}
             />
           </FormField>
@@ -393,9 +392,7 @@ export default function FormPanel({
     <div className="admin-form-panel card border-0">
       <div className="card-body p-4">
         <div className="admin-alert admin-alert-info">
-          {mode === "edit"
-            ? `Editando registro de ${meta.title.toLowerCase()}.`
-            : `Preparando un nuevo registro para ${meta.title.toLowerCase()}.`}
+          {mode === "edit" ? "Editando registro." : "Preparando un nuevo registro."}
         </div>
 
         <div className="mb-4">
@@ -403,7 +400,6 @@ export default function FormPanel({
           <h3 className="admin-section-title mb-2">
             {mode === "edit" ? "Editar registro" : meta.addLabel}
           </h3>
-          <p className="admin-section-copy mb-0">{meta.subtitle}</p>
         </div>
 
         <form onSubmit={onSubmit}>

@@ -141,47 +141,23 @@ export default function ManagementSection({
     <section className="admin-section-panel">
       <div className={`admin-workspace ${isFormOpen ? "admin-workspace-split" : ""}`}>
         <div className="admin-workspace-main">
-          <div className="admin-section-toolbar card border-0">
-            <div className="card-body p-4">
-              <div className="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center gap-3">
-                <div>
-                  <span className="admin-kicker">Administracion</span>
-                  <h2 className="admin-section-title mb-2">{meta.title}</h2>
-                  <p className="admin-section-copy mb-0">{meta.subtitle}</p>
-                </div>
-
-                <div className="d-flex flex-column flex-sm-row gap-2">
-                  <button type="button" className="btn admin-btn admin-btn-ghost">
-                    Exportar
-                  </button>
-                  <button
-                    type="button"
-                    className="btn admin-btn admin-btn-primary"
-                    onClick={onOpenAdd}
-                  >
-                    {meta.addLabel}
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="card border-0 admin-table-card mt-4">
+          <div className="card border-0 admin-table-card">
             <div className="card-body p-0">
               <div className="d-flex flex-column gap-3 px-4 py-4 border-bottom admin-table-header">
-                <div className="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
-                  <div>
-                    <h3 className="admin-card-title mb-1">{meta.title}</h3>
-                    <p className="admin-card-copy mb-0">
-                      Vista sincronizada con los nombres de campo del backend.
-                    </p>
-                  </div>
+                <div className="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center gap-3">
+                  <h2 className="admin-section-title mb-0">{meta.title}</h2>
 
-                  <div className="admin-inline-stats">
-                    <span className="admin-inline-chip">Registros: {visibleRows.length}</span>
-                    <span className="admin-inline-chip admin-inline-chip-muted">
-                      Fuente: {sectionKey === "peliculas" ? "API + mock fallback" : "Mock local"}
-                    </span>
+                  <div className="d-flex flex-column flex-sm-row gap-2">
+                    <button type="button" className="btn admin-btn admin-btn-ghost">
+                      Exportar
+                    </button>
+                    <button
+                      type="button"
+                      className="btn admin-btn admin-btn-primary"
+                      onClick={onOpenAdd}
+                    >
+                      {meta.addLabel}
+                    </button>
                   </div>
                 </div>
 

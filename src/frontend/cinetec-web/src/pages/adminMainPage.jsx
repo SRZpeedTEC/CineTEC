@@ -2,25 +2,14 @@ import logo from "../assets/icons/CineTEC_Logo.png";
 import "./admin.css";
 import { navigationItems } from "../config/adminConfig";
 import { useAdminMainPage } from "../hooks/useAdminMainPage";
-import DashboardSection from "../components/admin/DashboardSection";
 import ManagementSection from "../components/admin/ManagementSection";
 
 export default function AdminMainPage() {
-  const formattedToday = new Intl.DateTimeFormat("es-CR", {
-    weekday: "long",
-    day: "numeric",
-    month: "short",
-    year: "numeric",
-  }).format(new Date());
-
   const {
     activeTab,
-    activeSection,
     records,
     panelState,
     formData,
-    dashboardMetrics,
-    projectionHighlights,
     movieSearchId,
     movieSearchResult,
     movieSearchError,
@@ -70,55 +59,27 @@ export default function AdminMainPage() {
 
       <main className="admin-main-content">
         <div className="container-fluid px-3 px-lg-4 px-xxl-5 py-4 py-lg-5">
-          <div className="admin-topbar mb-4">
-            <div>
-              <p className="admin-kicker mb-2">Administrador</p>
-              <h1 className="admin-current-title mb-1">
-                {activeTab === "dashboard" ? "Dashboard Ejecutivo" : activeSection.title}
-              </h1>
-              <p className="admin-current-copy mb-0">
-                {activeTab === "dashboard"
-                  ? "Vista general de rendimiento, cartelera y operaciones del sistema."
-                  : activeSection.subtitle}
-              </p>
-            </div>
-
-            <div className="admin-topbar-meta">
-              <span className="admin-inline-chip text-capitalize">{formattedToday}</span>
-              <span className="admin-inline-chip admin-inline-chip-muted">Sesion activa</span>
-            </div>
-          </div>
-
-          {activeTab === "dashboard" ? (
-            <DashboardSection
-              metrics={dashboardMetrics}
-              projectionHighlights={projectionHighlights}
-              onCreateProjection={() => openForm("proyecciones", "add")}
-              onOpenCartelera={() => handleTabChange("peliculas")}
-            />
-          ) : (
-            <ManagementSection
-              sectionKey={activeTab}
-              records={records}
-              panelState={panelState}
-              formData={formData}
-              onOpenAdd={() => openForm(activeTab, "add")}
-              onOpenEdit={(record) => openForm(activeTab, "edit", record)}
-              onDelete={(recordId) => handleDeleteRecord(activeTab, recordId)}
-              onChange={handleFormChange}
-              onCancel={closeForm}
-              onSubmit={handleSubmit}
-              movieSearchId={movieSearchId}
-              movieSearchResult={movieSearchResult}
-              movieSearchError={movieSearchError}
-              movieApiNotice={movieApiNotice}
-              isMovieSearchLoading={isMovieSearchLoading}
-              isMovieSubmitting={isMovieSubmitting}
-              onMovieSearchInputChange={handleMovieSearchInputChange}
-              onMovieSearchSubmit={handleMovieSearchSubmit}
-              onMovieSearchReset={clearMovieSearch}
-            />
-          )}
+          <ManagementSection
+            sectionKey={activeTab}
+            records={records}
+            panelState={panelState}
+            formData={formData}
+            onOpenAdd={() => openForm(activeTab, "add")}
+            onOpenEdit={(record) => openForm(activeTab, "edit", record)}
+            onDelete={(recordId) => handleDeleteRecord(activeTab, recordId)}
+            onChange={handleFormChange}
+            onCancel={closeForm}
+            onSubmit={handleSubmit}
+            movieSearchId={movieSearchId}
+            movieSearchResult={movieSearchResult}
+            movieSearchError={movieSearchError}
+            movieApiNotice={movieApiNotice}
+            isMovieSearchLoading={isMovieSearchLoading}
+            isMovieSubmitting={isMovieSubmitting}
+            onMovieSearchInputChange={handleMovieSearchInputChange}
+            onMovieSearchSubmit={handleMovieSearchSubmit}
+            onMovieSearchReset={clearMovieSearch}
+          />
         </div>
       </main>
     </div>

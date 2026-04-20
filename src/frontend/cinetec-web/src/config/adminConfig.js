@@ -1,5 +1,4 @@
 export const navigationItems = [
-  { key: "dashboard", label: "Dashboard", badge: "DS" },
   { key: "clientes", label: "Clientes", badge: "CL" },
   { key: "peliculas", label: "Peliculas", badge: "PL" },
   { key: "sucursales", label: "Sucursales", badge: "SC" },
@@ -10,13 +9,13 @@ export const navigationItems = [
 export const sectionMeta = {
   clientes: {
     title: "Gestion de Clientes",
-    subtitle: "Campos alineados con el modelo Client del backend .NET.",
+    subtitle: "Informacion de clientes registrada en CineTEC.",
     addLabel: "Agregar cliente",
     columns: ["ID", "Email", "Password", "Birthdate", "Age", "Fname", "Minit"],
   },
   peliculas: {
     title: "Gestion de Peliculas",
-    subtitle: "Campos alineados con el modelo Movie del backend .NET.",
+    subtitle: "Peliculas disponibles en CineTEC.",
     addLabel: "Agregar pelicula",
     columns: [
       "Movie ID",
@@ -31,13 +30,13 @@ export const sectionMeta = {
   },
   sucursales: {
     title: "Gestion de Sucursales",
-    subtitle: "Campos alineados con el modelo Cinema del backend .NET.",
+    subtitle: "Sucursales disponibles en CineTEC.",
     addLabel: "Agregar sucursal",
     columns: ["Name", "Number of Rooms", "Address", "Province"],
   },
   salas: {
     title: "Gestion de Salas",
-    subtitle: "Campos alineados con el modelo Room del backend .NET.",
+    subtitle: "Salas disponibles en CineTEC.",
     addLabel: "Agregar sala",
     columns: [
       "Cinema ID",
@@ -51,7 +50,7 @@ export const sectionMeta = {
   },
   proyecciones: {
     title: "Gestion de Proyecciones",
-    subtitle: "Campos alineados con el modelo Function del backend .NET.",
+    subtitle: "Proyecciones disponibles en CineTEC.",
     addLabel: "Agregar proyeccion",
     columns: ["Movie ID", "Room Number", "Datetime"],
   },
@@ -72,12 +71,12 @@ export const emptyFormBySection = {
     originalName: "",
     commercialName: "",
     imageURL: "",
-    imageFile: null,
     imageFileName: "",
+    imagePreviewURL: "",
     duration: "",
     rating: "PG",
     director: "",
-    protagonists: [],
+    protagonists: "",
   },
   sucursales: {
     name: "",

@@ -2,10 +2,10 @@ import { startTransition, useDeferredValue, useEffect, useMemo, useState } from 
 import ClientNavbar from "../components/ClientNavbar";
 import { resolveMoviePosterSource } from "../components/MovieCard";
 import logo from "../assets/icons/CineTEC_Logo.png";
+import { initialRecords } from "../mocks/adminMockData";
 import { getMovies, toClientMovieCard } from "../services/movieService";
 import "./clientMainPage.css";
 
-const cinemaOptions = ["Todas las sedes"];
 const mockRoom = { rows: 12, cols: 10 };
 
 function generateSeats(rows, cols, seed) {
@@ -32,6 +32,10 @@ const rowLabels = Array.from({ length: mockRoom.rows }, (_, index) =>
  * @returns {JSX.Element}
  */
 function ClientMainPage() {
+  const cinemaOptions = useMemo(
+    () => ["Todas las sedes", ...initialRecords.sucursales.map((cinema) => cinema.name)],
+    []
+  );
   const [movies, setMovies] = useState([]);
   const [selectedCinema, setSelectedCinema] = useState(cinemaOptions[0]);
   const [searchTerm, setSearchTerm] = useState("");
@@ -58,7 +62,12 @@ function ClientMainPage() {
         }
 
         startTransition(() => {
-          setMovies(apiMovies.map((movie, index) => toClientMovieCard(movie, index)));
+          setMovies(
+            apiMovies.map((movie, index) => ({
+              ...toClientMovieCard(movie, index),
+              cinemas: initialRecords.sucursales.map((cinema) => cinema.name),
+            }))
+          );
           setErrorMessage("");
         });
       } catch (error) {
@@ -110,7 +119,7 @@ function ClientMainPage() {
     const query = deferredSearchTerm.trim().toLowerCase();
 
     return movies.filter((movie) => {
-      if (selectedCinema !== cinemaOptions[0]) {
+      if (selectedCinema !== cinemaOptions[0] && !movie.cinemas.includes(selectedCinema)) {
         return false;
       }
 
