@@ -1,30 +1,27 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ClientMainPage from "./pages/clientMainPage";
-import AdminLogin from "./pages/AdminLogin";
 import AdminMainPage from "./pages/adminMainPage";
 
+function getAppModeFromHash() {
+  return window.location.hash.toLowerCase() === "#admin" ? "admin" : "client";
+}
+
 function App() {
-  const mode = "client"; // "client" o "admin"
-  const [logged, setLogged] = useState(false);
+  const [appMode, setAppMode] = useState(getAppModeFromHash);
 
-  // MODO CLIENTE
-  if (mode === "client") {
-    return <ClientMainPage />;
-  }
-
-  return <AdminMainPage />;
-  //return <ClientMainPage />;
-
-  /*
-  // MODO ADMIN
-  if (mode === "admin") {
-    if (!logged) {
-      return <AdminLogin onLogin={() => setLogged(true)} />;
+  useEffect(() => {
+    function syncModeWithHash() {
+      setAppMode(getAppModeFromHash());
     }
 
-    return <AdminMainPage />;
-  }
-  */
+    window.addEventListener("hashchange", syncModeWithHash);
+
+    return () => {
+      window.removeEventListener("hashchange", syncModeWithHash);
+    };
+  }, []);
+
+  return appMode === "admin" ? <AdminMainPage /> : <ClientMainPage />;
 }
 
 export default App;

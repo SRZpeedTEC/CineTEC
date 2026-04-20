@@ -14,6 +14,9 @@
   --admin-border: #333333;
   --admin-border-strong: #555555;
   --admin-shadow: 4px 4px 0px #cc0000;
+  --admin-search-surface: #202024;
+  --admin-search-accent: #E69946;
+  --admin-search-placeholder: #CACBCC;
 }
 
 body {
@@ -379,10 +382,71 @@ body {
   background: var(--admin-bg-deep);
 }
 
+.admin-poster-thumb-image {
+  overflow: hidden;
+}
+
+.admin-poster-thumb-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
 .admin-poster-thumb span {
   color: var(--admin-text-strong);
   font-weight: 700;
   letter-spacing: 0.08em;
+}
+
+/* Search */
+.admin-search-row {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.admin-search-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  width: 100%;
+}
+
+.admin-search-input {
+  flex: 1 1 280px;
+  min-height: 50px;
+  padding: 0.9rem 1rem;
+  border: 1px solid var(--admin-border);
+  background: var(--admin-search-surface);
+  color: var(--admin-text-strong);
+  font-family: 'Share Tech Mono', 'Courier New', monospace;
+}
+
+.admin-search-input::placeholder {
+  color: var(--admin-search-placeholder);
+}
+
+.admin-search-input:focus {
+  outline: none;
+  border-color: var(--admin-search-accent);
+  box-shadow: 0 0 0 3px rgba(230, 153, 70, 0.2);
+}
+
+.admin-search-btn {
+  min-width: 132px;
+  min-height: 50px;
+  padding: 0.9rem 1.1rem;
+  border: 1px solid var(--admin-search-accent);
+  background: var(--admin-search-accent);
+  color: #111111;
+  font-family: 'Share Tech Mono', 'Courier New', monospace;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.admin-search-btn:disabled {
+  opacity: 0.7;
+  cursor: wait;
 }
 
 .admin-btn {
@@ -582,6 +646,22 @@ body {
   line-height: 1.5;
 }
 
+.admin-image-preview {
+  width: 100%;
+  min-height: 220px;
+  border: 1px solid var(--admin-border);
+  background: var(--admin-bg-deep);
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+}
+
+.admin-image-preview img {
+  width: 100%;
+  max-height: 320px;
+  object-fit: cover;
+}
+
 .admin-alert {
   border-radius: 0;
   border-width: 2px;
@@ -608,6 +688,13 @@ body {
   background: rgba(204, 0, 0, 0.12);
   border-color: var(--admin-primary);
   color: #ff6666;
+}
+
+.admin-empty-state {
+  padding: 2rem 1rem;
+  text-align: center;
+  color: var(--admin-text);
+  font-family: 'Share Tech Mono', 'Courier New', monospace;
 }
 
 .admin-login-container {
@@ -770,5 +857,10 @@ body {
 
   .admin-section-title {
     font-size: 1.65rem;
+  }
+
+  .admin-search-btn,
+  .admin-search-input {
+    width: 100%;
   }
 }

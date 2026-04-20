@@ -6,6 +6,13 @@ import DashboardSection from "../components/admin/DashboardSection";
 import ManagementSection from "../components/admin/ManagementSection";
 
 export default function AdminMainPage() {
+  const formattedToday = new Intl.DateTimeFormat("es-CR", {
+    weekday: "long",
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  }).format(new Date());
+
   const {
     activeTab,
     activeSection,
@@ -14,12 +21,21 @@ export default function AdminMainPage() {
     formData,
     dashboardMetrics,
     projectionHighlights,
+    movieSearchId,
+    movieSearchResult,
+    movieSearchError,
+    movieApiNotice,
+    isMovieSearchLoading,
+    isMovieSubmitting,
     openForm,
     closeForm,
     handleTabChange,
     handleFormChange,
     handleSubmit,
     handleDeleteRecord,
+    handleMovieSearchInputChange,
+    handleMovieSearchSubmit,
+    clearMovieSearch,
   } = useAdminMainPage();
 
   return (
@@ -49,7 +65,6 @@ export default function AdminMainPage() {
               </button>
             ))}
           </nav>
-
         </div>
       </aside>
 
@@ -69,8 +84,8 @@ export default function AdminMainPage() {
             </div>
 
             <div className="admin-topbar-meta">
-              <span className="admin-inline-chip">Jueves, 2 Abr 2026</span>
-              <span className="admin-inline-chip admin-inline-chip-muted">Sesión activa</span>
+              <span className="admin-inline-chip text-capitalize">{formattedToday}</span>
+              <span className="admin-inline-chip admin-inline-chip-muted">Sesion activa</span>
             </div>
           </div>
 
@@ -93,6 +108,15 @@ export default function AdminMainPage() {
               onChange={handleFormChange}
               onCancel={closeForm}
               onSubmit={handleSubmit}
+              movieSearchId={movieSearchId}
+              movieSearchResult={movieSearchResult}
+              movieSearchError={movieSearchError}
+              movieApiNotice={movieApiNotice}
+              isMovieSearchLoading={isMovieSearchLoading}
+              isMovieSubmitting={isMovieSubmitting}
+              onMovieSearchInputChange={handleMovieSearchInputChange}
+              onMovieSearchSubmit={handleMovieSearchSubmit}
+              onMovieSearchReset={clearMovieSearch}
             />
           )}
         </div>

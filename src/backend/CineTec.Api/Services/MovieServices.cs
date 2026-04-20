@@ -1,33 +1,32 @@
 using CineTec.Api.Models;
 using CineTec.Api.Repositories;
 
-namespace CineTec.Api.Services
+namespace CineTec.Api.Services;
+
+public static class MovieServices
 {
-    public static class MovieServices
+    public static Movie CreateMovie(Movie movie)
     {
-        public static Movie CreateMovie(Movie movie)
-        {
-            return MovieRepository.AddMovie(movie);
-        }
+        return MovieRepository.AddMovie(movie);
+    }
 
-        public static Movie? GetMovie(string originalName)
-        {
-            return MovieRepository.GetById(originalName);
-        }
+    public static Movie? GetMovie(int movieID)
+    {
+        return MovieRepository.GetById(movieID);
+    }
 
-        public static List<Movie> GetAllMovies()
-        {
-            return MovieRepository.GetAll();
-        }
+    public static List<Movie> GetAllMovies()
+    {
+        return MovieRepository.GetAll();
+    }
 
-        public static Movie? UpdateMovie(string originalName, Movie movie)
-        {
-            return MovieRepository.UpdateMovie(originalName, movie);
-        }
+    public static Movie? UpdateMovie(int movieID, Movie movie)
+    {
+        return MovieRepository.UpdateMovie(movieID, movie);
+    }
 
-        public static bool DeleteMovie(string originalName)
-        {
-            return MovieRepository.DeleteMovie(originalName);
-        }
+    public static bool DeleteMovie(int movieID)
+    {
+        return MovieRepository.DeleteMovie(movieID);
     }
 }

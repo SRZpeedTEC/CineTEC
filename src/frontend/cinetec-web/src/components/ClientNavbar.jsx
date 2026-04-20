@@ -29,7 +29,7 @@ function ClientNavbar({
             className="client-search-input"
             id="movie-search"
             onChange={(event) => onSearchChange(event.target.value)}
-            placeholder="Search movies..."
+            placeholder="Buscar peliculas..."
             type="search"
             value={searchValue}
           />

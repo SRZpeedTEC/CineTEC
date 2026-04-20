@@ -1,76 +1,73 @@
-using Microsoft.AspNetCore.Mvc;
-using CineTec.Api.Services;
 using CineTec.Api.Models;
+using CineTec.Api.Services;
+using Microsoft.AspNetCore.Mvc;
 
-namespace CineTec.Api.Controllers
+namespace CineTec.Api.Controllers;
+
+[ApiController]
+[Route("api/[controller]")]
+public class MoviesController : ControllerBase
 {
-    [ApiController]
-    [Route("api/[controller]")]
-    public class MoviesController : ControllerBase
+    [HttpPost]
+    public ActionResult<Movie> CreateMovie([FromBody] Movie movie)
     {
-        // POST: api/movies
-        [HttpPost]
-        public ActionResult<Movie> CreateMovie([FromBody] Movie movie)
+        if (string.IsNullOrWhiteSpace(movie.originalName))
         {
-            if (string.IsNullOrWhiteSpace(movie.originalName))
-            {
-                return BadRequest("Original name is required");
-            }
-
-            var createdMovie = MovieServices.CreateMovie(movie);
-
-            return CreatedAtAction(nameof(CreateMovie),
-                new { id = createdMovie.originalName },
-                createdMovie);
+            return BadRequest("Original name is required.");
         }
 
-        // GET: api/movies/{id}
-        [HttpGet("{id}")]
-        public ActionResult<Movie> GetMovie(string id)
+        var createdMovie = MovieServices.CreateMovie(movie);
+
+        return CreatedAtAction(nameof(GetMovie), new { id = createdMovie.movieID }, createdMovie);
+    }
+
+    [HttpGet("{id:int}")]
+    public ActionResult<Movie> GetMovie(int id)
+    {
+        var movie = MovieServices.GetMovie(id);
+
+        if (movie is null)
         {
-            var movie = MovieServices.GetMovie(id);
-
-            if (movie == null)
-            {
-                return NotFound("Movie not found");
-            }
-
-            return Ok(movie);
+            return NotFound("Movie not found.");
         }
 
-        // GET: api/movies
-        [HttpGet]
-        public ActionResult<List<Movie>> GetAll()
+        return Ok(movie);
+    }
+
+    [HttpGet]
+    public ActionResult<List<Movie>> GetAll()
+    {
+        return Ok(MovieServices.GetAllMovies());
+    }
+
+    [HttpPut("{id:int}")]
+    public ActionResult<Movie> UpdateMovie(int id, [FromBody] Movie movie)
+    {
+        if (string.IsNullOrWhiteSpace(movie.originalName))
         {
-            return Ok(MovieServices.GetAllMovies());
+            return BadRequest("Original name is required.");
         }
 
-        // PUT: api/movies/{id}
-        [HttpPut("{id}")]
-        public ActionResult<Movie> UpdateMovie(string id, [FromBody] Movie movie)
+        var updatedMovie = MovieServices.UpdateMovie(id, movie);
+
+        if (updatedMovie is null)
         {
-            var updatedMovie = MovieServices.UpdateMovie(id, movie);
-
-            if (updatedMovie == null)
-            {
-                return NotFound("Movie not found");
-            }
-
-            return Ok(updatedMovie);
+            return NotFound("Movie not found.");
         }
 
-        // DELETE: api/movies/{id}
-        [HttpDelete("{id}")]
-        public IActionResult DeleteMovie(string id)
+        return Ok(updatedMovie);
+    }
+
+    [HttpDelete("{id:int}")]
+    public IActionResult DeleteMovie(int id)
+    {
+        var deleted = MovieServices.DeleteMovie(id);
+
+        if (!deleted)
         {
-            var deleted = MovieServices.DeleteMovie(id);
-
-            if (!deleted)
-            {
-                return NotFound("Movie not found");
-            }
-
-            return NoContent(); // 204
+            return NotFound("Movie not found.");
         }
+
+        return NoContent();
     }
 }

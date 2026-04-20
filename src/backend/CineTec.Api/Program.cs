@@ -1,18 +1,26 @@
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 builder.Services.AddControllers();
-
 builder.Services.AddEndpointsApiExplorer();
-
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("Frontend", policy =>
+    {
+        policy
+            .WithOrigins(
+                "http://localhost:5173",
+                "http://127.0.0.1:5173",
+                "http://localhost:4173",
+                "http://127.0.0.1:4173")
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+    });
+});
 
 var app = builder.Build();
 
-
-app.UseHttpsRedirection();
-
+app.UseCors("Frontend");
 app.UseAuthorization();
-
 app.MapControllers();
 
-app.Run();  
+app.Run();

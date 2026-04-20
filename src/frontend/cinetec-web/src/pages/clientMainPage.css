@@ -18,6 +18,16 @@ body {
   color: var(--client-text);
 }
 
+.client-api-alert {
+  margin: 1rem 1.5rem 0;
+  padding: 0.85rem 1rem;
+  border: 1px solid var(--client-red);
+  background: rgba(204, 0, 0, 0.08);
+  color: var(--client-text-strong);
+  font-family: 'Share Tech Mono', 'Courier New', monospace;
+  font-size: 0.78rem;
+}
+
 /* ─── Navbar ──────────────────────────────────────────────────────────────── */
 .client-navbar-wrap {
   position: sticky;

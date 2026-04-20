@@ -1,79 +1,103 @@
 using System.Text.Json;
 using CineTec.Api.Models;
 
-namespace CineTec.Api.Repositories
+namespace CineTec.Api.Repositories;
+
+public static class MovieRepository
 {
-    public static class MovieRepository
+    private static readonly string filePath =
+        Path.Combine(Directory.GetCurrentDirectory(), "dataBase", "movies.json");
+
+    public static List<Movie> GetAll()
     {
-        private static readonly string filePath =
-            Path.Combine(Directory.GetCurrentDirectory(), "dataBase", "movies.json");
+        EnsureStorage();
 
-        public static List<Movie> GetAll()
+        var jsonData = File.ReadAllText(filePath);
+        var movies = JsonSerializer.Deserialize<List<Movie>>(jsonData, new JsonSerializerOptions
         {
-            if (!File.Exists(filePath))
-            {
-                File.WriteAllText(filePath, "[]");
-            }
+            PropertyNameCaseInsensitive = true
+        });
 
-            var jsonData = File.ReadAllText(filePath);
-            var movies = JsonSerializer.Deserialize<List<Movie>>(jsonData);
+        return movies ?? new List<Movie>();
+    }
 
-            return movies ?? new List<Movie>();
+    public static Movie AddMovie(Movie movie)
+    {
+        var movies = GetAll();
+
+        movie.movieID = movie.movieID > 0
+            ? movie.movieID
+            : movies.Count == 0
+                ? 1
+                : movies.Max(existingMovie => existingMovie.movieID) + 1;
+
+        movies.RemoveAll(existingMovie => existingMovie.movieID == movie.movieID);
+        movies.Add(movie);
+        SaveAll(movies);
+
+        return movie;
+    }
+
+    public static Movie? GetById(int movieID)
+    {
+        return GetAll().FirstOrDefault(movie => movie.movieID == movieID);
+    }
+
+    public static Movie? UpdateMovie(int movieID, Movie updatedMovie)
+    {
+        var movies = GetAll();
+        var index = movies.FindIndex(movie => movie.movieID == movieID);
+
+        if (index == -1)
+        {
+            return null;
         }
 
-        public static Movie AddMovie(Movie movie)
+        updatedMovie.movieID = movieID;
+        movies[index] = updatedMovie;
+        SaveAll(movies);
+
+        return updatedMovie;
+    }
+
+    public static bool DeleteMovie(int movieID)
+    {
+        var movies = GetAll();
+        var movie = movies.FirstOrDefault(existingMovie => existingMovie.movieID == movieID);
+
+        if (movie is null)
         {
-            var movies = GetAll();
-            movies.Add(movie);
-            SaveAll(movies);
-            return movie;
+            return false;
         }
 
-        public static Movie? GetById(string originalName)
+        movies.Remove(movie);
+        SaveAll(movies);
+
+        return true;
+    }
+
+    private static void EnsureStorage()
+    {
+        var directory = Path.GetDirectoryName(filePath);
+
+        if (!string.IsNullOrWhiteSpace(directory) && !Directory.Exists(directory))
         {
-            return GetAll().FirstOrDefault(m => m.originalName == originalName);
+            Directory.CreateDirectory(directory);
         }
 
-        public static Movie? UpdateMovie(string originalName, Movie updatedMovie)
+        if (!File.Exists(filePath))
         {
-            var movies = GetAll();
-
-            var index = movies.FindIndex(m => m.originalName == originalName);
-
-            if (index == -1)
-                return null;
-
-            movies[index] = updatedMovie;
-
-            SaveAll(movies);
-
-            return updatedMovie;
+            File.WriteAllText(filePath, "[]");
         }
+    }
 
-        public static bool DeleteMovie(string originalName)
+    private static void SaveAll(List<Movie> movies)
+    {
+        var jsonData = JsonSerializer.Serialize(movies.OrderBy(movie => movie.movieID), new JsonSerializerOptions
         {
-            var movies = GetAll();
+            WriteIndented = true
+        });
 
-            var movie = movies.FirstOrDefault(m => m.originalName == originalName);
-
-            if (movie == null)
-                return false;
-
-            movies.Remove(movie);
-
-            SaveAll(movies);
-
-            return true;
-        }
-
-        private static void SaveAll(List<Movie> movies)
-        {
-            var jsonData = JsonSerializer.Serialize(movies, new JsonSerializerOptions
-            {
-                WriteIndented = true
-            });
-
-            File.WriteAllText(filePath, jsonData);
-        }
+        File.WriteAllText(filePath, jsonData);
     }
 }
