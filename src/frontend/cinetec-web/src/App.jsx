@@ -6,7 +6,7 @@ import AdminMainPage from "./pages/adminMainPage";
 /**
  * Root application shell used to switch between client and admin experiences.
  *
- * @returns {JSX.Element | undefined}
+ * @returns {JSX.Element}
  */
 function App() {
   // This local switch is handy while the project still keeps client and admin entry flows in the same app shell.
@@ -24,6 +24,8 @@ function App() {
 
     return <AdminMainPage />;
   }
+
+  return <ClientMainPage />;
 }
 
 export default App;

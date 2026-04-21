@@ -23,5 +23,17 @@
       "Mario",
       "Luigi"
     ]
+  },
+  {
+    "movieID": 3,
+    "originalName": "Felipe",
+    "commercialName": "PIPER",
+    "imageURL": "Felipe.jpg",
+    "duration": "60 min",
+    "rating": "NC-17",
+    "director": "Santiago Boza",
+    "protagonists": [
+      "Felipe Chaves"
+    ]
   }
 ]

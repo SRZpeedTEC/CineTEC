@@ -140,7 +140,7 @@ export default function ManagementSection({
   onMovieSearchReset = () => {},
 }) {
   const meta = sectionMeta[sectionKey];
-  const rows = records[sectionKey];
+  const rows = records[sectionKey] ?? [];
   const isFormOpen = panelState.isOpen && panelState.sectionKey === sectionKey;
   // When an admin searches by ID, we intentionally narrow the table to that single persisted record.
   const visibleRows =

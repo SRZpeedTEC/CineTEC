@@ -11,9 +11,17 @@ export default function AdminLogin({ onLogin }) {
   const [user, setUser] = useState("");
   const [pass, setPass] = useState("");
 
-  const handleLogin = () => {
+  /**
+   * Validates the temporary local credentials and unlocks the admin view.
+   *
+   * @param {React.FormEvent<HTMLFormElement>} event
+   * @returns {void}
+   */
+  const handleLogin = (event) => {
+    event.preventDefault();
+
     // These local credentials are only a temporary front-end gate until a real auth flow is connected.
-    if (user === "admin" && pass === "1234") {
+    if (user.trim() === "admin" && pass === "1234") {
       onLogin();
     } else {
       alert("Credenciales incorrectas");
@@ -25,22 +33,26 @@ export default function AdminLogin({ onLogin }) {
       {/* Centered card keeps this transitional login isolated from the rest of the admin workspace. */}
       <div className="admin-login-card">
         <h2>CineTEC Admin</h2>
-        <p>Iniciar sesión</p>
+        <p>Iniciar sesion</p>
 
-        <input
-          placeholder="Usuario"
-          onChange={(e) => setUser(e.target.value)}
-        />
+        <form onSubmit={handleLogin}>
+          <input
+            placeholder="Usuario"
+            value={user}
+            onChange={(event) => setUser(event.target.value)}
+          />
 
-        <input
-          type="password"
-          placeholder="Contraseña"
-          onChange={(e) => setPass(e.target.value)}
-        />
+          <input
+            type="password"
+            placeholder="Contrasena"
+            value={pass}
+            onChange={(event) => setPass(event.target.value)}
+          />
 
-        <button onClick={handleLogin}>
-          Ingresar
-        </button>
+          <button type="submit">
+            Ingresar
+          </button>
+        </form>
       </div>
     </div>
   );

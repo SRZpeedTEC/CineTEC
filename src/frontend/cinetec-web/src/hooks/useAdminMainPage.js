@@ -46,8 +46,14 @@ import {
  * }}
  */
 export function useAdminMainPage() {
+  const [records, setRecords] = useState(() => ({
+    clientes: initialRecords.clientes ?? [],
+    peliculas: initialRecords.peliculas ?? [],
+    sucursales: initialRecords.sucursales ?? [],
+    salas: initialRecords.salas ?? [],
+    proyecciones: initialRecords.proyecciones ?? [],
+  }));
   const [activeTab, setActiveTab] = useState("peliculas");
-  const [records, setRecords] = useState(initialRecords);
   const [panelState, setPanelState] = useState({
     isOpen: false,
     sectionKey: null,
