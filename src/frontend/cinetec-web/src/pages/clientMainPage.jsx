@@ -4,6 +4,8 @@ import { resolveMoviePosterSource } from "../components/MovieCard";
 import logo from "../assets/icons/CineTEC_Logo.png";
 import { initialRecords } from "../mocks/adminMockData";
 import { getMovies, toClientMovieCard } from "../services/movieService";
+import { downloadReceiptFromApi } from "../services/purchaseService";
+import { buildPurchaseSummary } from "../utils/ticketPdf";
 import "./clientMainPage.css";
 
 const mockRoom = { rows: 12, cols: 10 };
@@ -53,6 +55,7 @@ function ClientMainPage() {
   const [bookingSession, setBookingSession] = useState(null);
   const [seats, setSeats] = useState([]);
   const [selectedSeats, setSelectedSeats] = useState([]);
+  const [purchaseMessage, setPurchaseMessage] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -88,7 +91,7 @@ function ClientMainPage() {
         setErrorMessage(
           error instanceof Error
             ? error.message
-            : "No se pudo cargar la cartelera."
+            : "No se pudo conectar con el API de peliculas."
         );
       } finally {
         if (isMounted) {
@@ -155,12 +158,14 @@ function ClientMainPage() {
     setModalMovie(movie);
     setBookingSession(null);
     setSelectedSeats([]);
+    setPurchaseMessage("");
   }
 
   function closeModal() {
     setModalMovie(null);
     setBookingSession(null);
     setSelectedSeats([]);
+    setPurchaseMessage("");
   }
 
   function pickSession(session) {
@@ -172,6 +177,7 @@ function ClientMainPage() {
     // The movie ID works as a stable seed, so each movie gets a repeatable seat pattern for demos.
     setSeats(generateSeats(mockRoom.rows, mockRoom.cols, modalMovie.movieID));
     setSelectedSeats([]);
+    setPurchaseMessage("");
   }
 
   function toggleSeat(seat) {
@@ -184,6 +190,23 @@ function ClientMainPage() {
         ? currentSelection.filter((seatId) => seatId !== seat.id)
         : [...currentSelection, seat.id]
     );
+    setPurchaseMessage("");
+  }
+
+  async function confirmPurchase() {
+    if (!modalMovie || !bookingSession || selectedSeats.length === 0) {
+      return;
+    }
+
+    const summary = buildPurchaseSummary({
+      cinema: selectedCinema,
+      movie: modalMovie,
+      seats: selectedSeats,
+      session: bookingSession,
+    });
+
+    await downloadReceiptFromApi(summary);
+    setPurchaseMessage(`Comprobante ${summary.purchaseCode} descargado desde el API .NET.`);
   }
 
   return (
@@ -429,11 +452,15 @@ function ClientMainPage() {
                     <button
                       className="client-book-btn"
                       disabled={selectedSeats.length === 0}
+                      onClick={confirmPurchase}
                       type="button"
                     >
-                      Confirmar
+                      Descargar PDF
                     </button>
                   </div>
+                  {purchaseMessage ? (
+                    <p className="client-purchase-message">{purchaseMessage}</p>
+                  ) : null}
                 </div>
               </>
             )}
