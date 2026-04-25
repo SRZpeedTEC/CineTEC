@@ -1,7 +1,7 @@
 namespace CineTec.Api.Helpers;
 
 /// <summary>
-/// Resolves storage file paths independently from the current working directory.
+/// Resolves storage file paths from the application's deployed content root.
 /// </summary>
 public static class StoragePathHelper
 {
@@ -12,36 +12,6 @@ public static class StoragePathHelper
     /// <returns>The absolute path for the storage file.</returns>
     public static string GetStorageFilePath(string fileName)
     {
-        var projectDirectory = FindProjectDirectory();
-        return Path.Combine(projectDirectory, "dataBase", fileName);
-    }
-
-    private static string FindProjectDirectory()
-    {
-        var candidates = new[]
-        {
-            AppContext.BaseDirectory,
-            Directory.GetCurrentDirectory(),
-        };
-
-        foreach (var candidate in candidates)
-        {
-            var directory = new DirectoryInfo(candidate);
-
-            while (directory is not null)
-            {
-                var dataBaseDirectory = Path.Combine(directory.FullName, "dataBase");
-                var projectFile = Path.Combine(directory.FullName, "CineTec.Api.csproj");
-
-                if (Directory.Exists(dataBaseDirectory) && File.Exists(projectFile))
-                {
-                    return directory.FullName;
-                }
-
-                directory = directory.Parent;
-            }
-        }
-
-        throw new DirectoryNotFoundException("Could not locate the CineTec.Api project directory.");
+        return Path.Combine(AppContext.BaseDirectory, "dataBase", fileName);
     }
 }
