@@ -1,4 +1,5 @@
 using System.Text.Json;
+using CineTec.Api.Helpers;
 using CineTec.Api.Models;
 
 namespace CineTec.Api.Repositories
@@ -9,7 +10,7 @@ namespace CineTec.Api.Repositories
     public static class CinemaRepository
     {
         private static readonly string filePath =
-            Path.Combine(Directory.GetCurrentDirectory(), "dataBase", "cinemas.json");
+            StoragePathHelper.GetStorageFilePath("cinemas.json");
 
         /// <summary>
         /// Gets every stored cinema branch.

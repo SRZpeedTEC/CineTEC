@@ -1,4 +1,5 @@
 using System.Text.Json;
+using CineTec.Api.Helpers;
 using CineTec.Api.Models;
 
 namespace CineTec.Api.Repositories;
