@@ -1,9 +1,11 @@
+/* --- Global Reset --- */
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
 
+/* --- Base Typography --- */
 body {
-  font-family: sans-serif;
+  font-family: 'Share Tech Mono', 'Courier New', monospace;
 }

@@ -1,0 +1,69 @@
+export const initialRecords = {
+  clientes: [
+    {
+      ID: 1,
+      email: "maria.fernandez@cinetec.cr",
+      password: "maria1234",
+      birthdate: "1998-04-21",
+      age: 27,
+      Fname: "Maria",
+      Minit: "F",
+    },
+    {
+      ID: 2,
+      email: "daniel.solano@cinetec.cr",
+      password: "daniel1234",
+      birthdate: "1989-11-03",
+      age: 36,
+      Fname: "Daniel",
+      Minit: "S",
+    },
+  ],
+  
+  sucursales: [
+    {
+      name: "CineTEC Escazu",
+      number_of_rooms: 8,
+      address: "Multiplaza Escazu",
+      province: "San Jose",
+    },
+    {
+      name: "CineTEC Cartago",
+      number_of_rooms: 6,
+      address: "Paseo Metropoli",
+      province: "Cartago",
+    },
+  ],
+  salas: [
+    {
+      Cinema_id: "CineTEC Escazu",
+      room_number: 1,
+      number_of_columns: 18,
+      number_of_rows: 12,
+      total_capacity: 216,
+      capacity_factor: 100,
+      max_capacity: 216,
+    },
+    {
+      Cinema_id: "CineTEC Cartago",
+      room_number: 7,
+      number_of_columns: 16,
+      number_of_rows: 10,
+      total_capacity: 160,
+      capacity_factor: 100,
+      max_capacity: 160,
+    },
+  ],
+  proyecciones: [
+    {
+      Movie_id: "101",
+      room_number: 1,
+      datetime: "2026-04-19T19:20",
+    },
+    {
+      Movie_id: "102",
+      room_number: 7,
+      datetime: "2026-04-19T21:40",
+    },
+  ],
+};

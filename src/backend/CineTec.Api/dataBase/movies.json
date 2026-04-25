@@ -1,0 +1,39 @@
+[
+  {
+    "movieID": 1,
+    "originalName": "El legado de turing",
+    "commercialName": "El legado de turing el regreso",
+    "imageURL": "Turing.jpg",
+    "duration": "150 min",
+    "rating": "PG",
+    "director": "Santiago Boza",
+    "protagonists": [
+      "Eduardo"
+    ]
+  },
+  {
+    "movieID": 2,
+    "originalName": "Mario Galaxy",
+    "commercialName": "Super Mario Galaxy The Movie",
+    "imageURL": "Mario.jpg",
+    "duration": "120 min",
+    "rating": "G",
+    "director": "Cristopher Nolan",
+    "protagonists": [
+      "Mario",
+      "Luigi"
+    ]
+  },
+  {
+    "movieID": 3,
+    "originalName": "Felipe",
+    "commercialName": "PIPER",
+    "imageURL": "Felipe.jpg",
+    "duration": "60 min",
+    "rating": "NC-17",
+    "director": "Santiago Boza",
+    "protagonists": [
+      "Felipe Chaves"
+    ]
+  }
+]
