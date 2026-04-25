@@ -5,7 +5,15 @@
   padding: 0;
 }
 
+html {
+  overflow-x: hidden;
+  max-width: 100%;
+}
+
 /* --- Base Typography --- */
 body {
   font-family: 'Share Tech Mono', 'Courier New', monospace;
+  overflow-x: hidden;
+  max-width: 100%;
+  width: 100%;
 }
