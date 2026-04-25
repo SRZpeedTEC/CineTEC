@@ -10,7 +10,7 @@ namespace CineTec.Api.Repositories;
 public static class MovieRepository
 {
     private static readonly string filePath =
-        StoragePathHelper.GetStorageFilePath("movies.json");
+        Path.Combine(Directory.GetCurrentDirectory(), "dataBase", "movies.json");
 
     /// <summary>
     /// Gets every stored movie.
