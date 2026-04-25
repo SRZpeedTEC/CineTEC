@@ -1,4 +1,5 @@
 using System.Text.Json;
+using CineTec.Api.Helpers;
 using CineTec.Api.Models;
 
 namespace CineTec.Api.Repositories;
@@ -9,7 +10,7 @@ namespace CineTec.Api.Repositories;
 public static class MovieRepository
 {
     private static readonly string filePath =
-        Path.Combine(Directory.GetCurrentDirectory(), "dataBase", "movies.json");
+        StoragePathHelper.GetStorageFilePath("movies.json");
 
     /// <summary>
     /// Gets every stored movie.
