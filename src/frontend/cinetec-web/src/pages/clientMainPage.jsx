@@ -88,11 +88,9 @@ function ClientMainPage() {
           return;
         }
 
-        setErrorMessage(
-          error instanceof Error
-            ? error.message
-            : "No se pudo conectar con el API de peliculas."
-        );
+        const msg = error instanceof Error ? error.message : "No se pudo conectar con el API de peliculas.";
+        alert("API ERROR: " + msg);
+        setErrorMessage(msg);
       } finally {
         if (isMounted) {
           setIsLoading(false);

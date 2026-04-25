@@ -1,0 +1,12 @@
+{
+  "appId": "com.cinetec.app",
+  "appName": "CineTEC",
+  "webDir": "dist",
+  "server": {
+    "cleartext": true,
+    "allowNavigation": ["10.0.2.2"]
+  },
+  "android": {
+    "allowMixedContent": true
+  }
+}
